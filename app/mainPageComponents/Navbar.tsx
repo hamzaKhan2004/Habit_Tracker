@@ -50,7 +50,7 @@ function Navbar() {
                                 <Link href={"/sign-up"}>
                                 <button className={`block sm:w-32 w-full  border rounded-lg px-9 py-3 transition text-sm font-medium hover:bg-customRed hover:text-white  focus:outline-none border-customRed text-customRed`}
                                     type='button'>
-                                    Sign Up
+                                    Sign UP 
                                 </button>
                                 </Link>
                             </div>

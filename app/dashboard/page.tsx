@@ -6,8 +6,11 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const {user} = useUser();
   return (
-    <div>
-        hello, {user?.lastName} {" "} <SignOutButton>SignOut</SignOutButton>
+    <div className='flex justify-center mt-52'>
+        hello, {user?.lastName} {" "} 
+        <span className={`block  sm:w-32 w-full  border rounded-lg px-9 py-3 transition text-sm font-medium hover:bg-customRed hover:text-white  focus:outline-none border-customRed text-customRed`}>
+        <SignOutButton>SignOut</SignOutButton>
+        </span>
     </div>
   )
 }
