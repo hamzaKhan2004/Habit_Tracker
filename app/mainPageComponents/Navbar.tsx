@@ -1,8 +1,9 @@
 "use client";
 import React from 'react'
-import AppIcon from '../SVG_Icons/AppIcon';
+// import AppIcon from '../SVG_Icons/AppIcon';
 import Link from 'next/link';
 import { useAuth } from '@clerk/nextjs';
+import LogoAnName from '../Components/LogoAnName';
 
 function Navbar() {
   const {userId} = useAuth();
@@ -14,20 +15,8 @@ function Navbar() {
                 <div className="sm:flex sm:items-center sm:justify-between">
                     <div className="text-center sm:text-left mb-7 sm:mb-0">
                         {/* {Icon + Name of the app} */}
-                        <div className="flex gap-2 items-center sm:justify-start justify-center">
-                            <span className='text-2xl font-light flex items-center gap-2'>
-                                    {/* the icon  */}
-                                <div style={backgroundColorObject} className="p-2 rounded-md">
-                                    <AppIcon color='#ffffff' height='34' width='34'/>
-                                </div>
-                                <span style={{color:"#d90429"}} className='font-bold text-mainColor'>
-                                    Habit
-                                </span>
-                                <span  className='font-light text-black'>
-                                    tracker
-                                </span>
-                            </span>
-                        </div>
+                        <LogoAnName/>
+                        
                     </div>
                     {/* The buttons  */}
                     {

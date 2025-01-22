@@ -3,6 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 // import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import "./globals.css";
+import GlobalContextProvider from "./contextApi";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const inter = Inter({subsets:["latin"]});
@@ -27,12 +28,11 @@ export default function RootLayout({
     <html lang="en">
       
       <ClerkProvider>
-      <body
-        className={`${poppins.className}`}
-      >
-        {children}
-      </body>
-
+      <GlobalContextProvider>
+        <body className={`${poppins.className}`}>
+          {children}
+        </body>
+        </GlobalContextProvider>
       </ClerkProvider>
     </html>
   );

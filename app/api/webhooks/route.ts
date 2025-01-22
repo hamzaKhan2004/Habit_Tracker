@@ -5,7 +5,7 @@ import connectToDB from "@/app/lib/connectToDB";
 import User from "@/app/Models/UserSchema";
 
 export async function POST(req: Request) {
-  const SIGNING_SECRET = process.env.SIGNING_SECRET;
+  const SIGNING_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!SIGNING_SECRET) {
     throw new Error(
