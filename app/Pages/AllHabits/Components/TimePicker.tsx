@@ -11,6 +11,7 @@ function TimePicker({
 }) {
   //Constants
   const { darkModeObject, openTimePickerObject } = useGlobalContextProivder();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isDarkMode } = darkModeObject;
   const { openTimePickerWindow, setOpenTimePickerWindow } =
     openTimePickerObject;

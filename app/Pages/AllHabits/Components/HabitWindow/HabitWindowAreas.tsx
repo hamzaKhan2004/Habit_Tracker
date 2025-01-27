@@ -3,8 +3,10 @@ import MultipleSelectChip from "./MultipleSelectChip";
 function HabitWindowAreas({
   onChange,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange: (selectedItems: any) => void;
 }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function getSelectedItems(selectedItems: any) {
     onChange(selectedItems);
   }

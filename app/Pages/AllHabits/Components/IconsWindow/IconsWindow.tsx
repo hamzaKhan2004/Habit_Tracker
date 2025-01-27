@@ -9,6 +9,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 function IconsWindow({
   openIconWindow,
   setOpenIconWindow,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   iconSelected,
   setIconSelected,
 }: {
@@ -17,6 +18,7 @@ function IconsWindow({
   iconSelected: IconProp;
   setIconSelected: React.Dispatch<React.SetStateAction<IconProp>>;
 }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [allIcons, setAllIcons] = useState(iconsData);
   const { darkModeObject } = useGlobalContextProivder();
   const { isDarkMode } = darkModeObject;

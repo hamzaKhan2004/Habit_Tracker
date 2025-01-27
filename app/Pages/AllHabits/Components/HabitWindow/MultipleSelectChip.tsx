@@ -10,7 +10,7 @@ import Chip from "@mui/material/Chip";
 import { defaultColor } from "@/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGlobalContextProivder } from "@/app/contextApi";
-import { Area } from "recharts";
+// import { Area } from "recharts";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -23,19 +23,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
     fontWeight: personName.includes(name)
@@ -47,13 +34,15 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 export default function MultipleSelectChip({
   onChange,
 }: {
-  onChange: (selectedAreasItems: any) => void;
+  onChange: (selectedAreasItems: unknown) => void;
 }) {
   const theme = useTheme();
   const { allAreasObject } = useGlobalContextProivder();
   const { allAreas } = allAreasObject;
   const [selectedAreas, setSelectedAreas] = React.useState<string[]>([]);
-  const [selectedAreasItems, setSelectedAreasItems] = React.useState<any>([]);
+  const [selectedAreasItems, setSelectedAreasItems] = React.useState<unknown>(
+    []
+  );
 
   const handleChange = (event: SelectChangeEvent<typeof selectedAreas>) => {
     const {
