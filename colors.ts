@@ -8,6 +8,7 @@ export const defaultColor = {
   backgroundSlate: "rgb(248,250,252)",
   50: "rgba(217,4,41,0.5)",
   100: "rgba(217,4,41,0.05)",
+  textColorGray: "#6c757d",
 };
 
 export const darkModeColor = {

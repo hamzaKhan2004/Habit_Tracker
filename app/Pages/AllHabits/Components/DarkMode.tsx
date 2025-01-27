@@ -1,15 +1,16 @@
-import { useGlobalContextProivder } from '@/app/contextApi';
-import { darkModeColor, defaultColor } from '@/colors';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect } from 'react';
+import { useGlobalContextProivder } from "@/app/contextApi";
+import { darkModeColor, defaultColor } from "@/colors";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect } from "react";
 
 function DarkMode() {
   const { darkModeObject } = useGlobalContextProivder();
-  const { isDarkMode, setDarkMode, darkModeItems, setDarkModeItems } = darkModeObject;
+  const { isDarkMode, setDarkMode, darkModeItems, setDarkModeItems } =
+    darkModeObject;
 
   useEffect(() => {
     // Retrieve dark mode preference from localStorage
-    const storedDarkMode = localStorage.getItem('isDarkMode');
+    const storedDarkMode = localStorage.getItem("isDarkMode");
     if (storedDarkMode !== null) {
       const darkModeEnabled = JSON.parse(storedDarkMode);
       setDarkMode(darkModeEnabled);
@@ -22,11 +23,19 @@ function DarkMode() {
     }
   }, []); // Run only once on component mount
 
-
   function handleClickedItem(singleItemIndex: number) {
     const updatedDarkModeItems = darkModeItems.map((darkModeItem, index) => {
-      if (singleItemIndex === index) return { ...darkModeItem, isSelected: true };
+      if (singleItemIndex === index) {
+        // Update the dark mode state based on the selected item
+        const isSelected = !darkModeItem.isSelected; // Toggle selection
+        const newDarkMode = singleItemIndex === 1 ? false : true; // Determine new dark mode state
 
+        // Save the new dark mode preference to localStorage
+        localStorage.setItem("isDarkMode", JSON.stringify(newDarkMode));
+        setDarkMode(newDarkMode);
+
+        return { ...darkModeItem, isSelected };
+      }
       return { ...darkModeItem, isSelected: false };
     });
 
@@ -43,7 +52,9 @@ function DarkMode() {
   return (
     <div
       style={{
-        backgroundColor: isDarkMode ? darkModeColor.backgroundSlate : defaultColor.backgroundSlate,
+        backgroundColor: isDarkMode
+          ? darkModeColor.backgroundSlate
+          : defaultColor.backgroundSlate,
       }}
       className="w-[90px] relative rounded-3xl flex"
     >
@@ -55,7 +66,7 @@ function DarkMode() {
         >
           <FontAwesomeIcon
             className={`${
-              singleItem.isSelected ? 'text-customRed' : 'text-gray-300'
+              singleItem.isSelected ? "text-customRed" : "text-gray-300"
             } cursor-pointer`}
             icon={singleItem.icon}
             width={20}
@@ -65,10 +76,12 @@ function DarkMode() {
       ))}
       <div
         style={{
-          backgroundColor: isDarkMode ? darkModeColor.background : defaultColor.background,
+          backgroundColor: isDarkMode
+            ? darkModeColor.background
+            : defaultColor.background,
         }}
         className={`w-[38px] absolute h-[38px] top-1 transform ${
-          isDarkMode ? 'translate-x-[48px]' : 'translate-x-1'
+          isDarkMode ? "translate-x-[48px]" : "translate-x-1"
         } rounded-full bg-white transition-all`}
       ></div>
     </div>
