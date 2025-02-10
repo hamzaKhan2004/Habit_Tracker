@@ -29,6 +29,7 @@ type HabitType = {
   notificationTime: string;
   isNotificationOn: boolean;
   areas: AreaType[];
+  completedDays: [];
 };
 
 type RepeatOption = {
@@ -57,10 +58,12 @@ function HabitWindow() {
     notificationTime: "",
     isNotificationOn: false,
     areas: [],
+    completedDays: [],
   });
 
   const [openIconWindow, setOpenIconWindow] = useState<boolean>(false);
   const [iconSelected, setIconSelected] = useState<IconProp>(habitItem.icon);
+  // console.log("habitItem", habitItem);
 
   //Functions
 
@@ -126,6 +129,22 @@ function HabitWindow() {
     copyHabitItem.icon = iconSelected;
     setHabitItem(copyHabitItem);
   }, [iconSelected]);
+
+  useEffect(() => {
+    if (openHabitWindow) {
+      setHabitItem({
+        _id: "",
+        name: "",
+        icon: faChevronDown,
+        frequency: [{ type: "Daily", days: ["MON"], number: 1 }],
+        notificationTime: "",
+        isNotificationOn: false,
+        areas: [],
+        completedDays: [],
+      });
+    }
+  }, [openHabitWindow]);
+
   return (
     <div
       style={{
@@ -341,8 +360,10 @@ function DailyOptions({
   allDays: DayOption[];
   setAllDays: React.Dispatch<React.SetStateAction<DayOption[]>>;
 }) {
-  const { darkModeObject } = useGlobalContextProivder();
+  const { darkModeObject, habitWindowObject } = useGlobalContextProivder();
   const { isDarkMode } = darkModeObject;
+  const { openHabitWindow } = habitWindowObject;
+
   function selectedDays(singleDayIndex: number) {
     const selectedCount: number = allDays.filter(
       (singleDay) => singleDay.isSelected
@@ -361,6 +382,16 @@ function DailyOptions({
     });
     setAllDays(updatedAllDays);
   }
+  useEffect(() => {
+    if (openHabitWindow) {
+      const updateSelectedDays = allDays.map((singleDay) => {
+        return { ...singleDay, isSelected: false };
+      });
+
+      updateSelectedDays[0].isSelected = true;
+      setAllDays(updateSelectedDays);
+    }
+  }, [openHabitWindow]);
   return (
     <div className="mt-5 flex flex-col gap-4">
       <span className="font-medium opacity-85">On These Days</span>

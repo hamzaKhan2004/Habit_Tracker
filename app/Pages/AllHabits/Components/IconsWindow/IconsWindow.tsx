@@ -22,7 +22,7 @@ function IconsWindow({
   const [allIcons, setAllIcons] = useState(iconsData);
   const { darkModeObject } = useGlobalContextProivder();
   const { isDarkMode } = darkModeObject;
-  console.log(openIconWindow);
+  // console.log(openIconWindow);
 
   return (
     <div

@@ -12,6 +12,7 @@ import { menuItemType } from "./Types/MenuItemType";
 import { faRectangleList } from "@fortawesome/free-regular-svg-icons";
 import { faMoon, faSun } from "@fortawesome/free-regular-svg-icons";
 import {
+  faBriefcase,
   faChartSimple,
   faCode,
   faGraduationCap,
@@ -23,6 +24,7 @@ import { AreaType, HabitType } from "./Types/GlobalTypes";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { textToIcon } from "./Pages/AllHabits/Components/IconsWindow/IconData";
 import { getDateString } from "./utils/allHabitsUtils/DateFunctions";
+import { v4 as uuidv4 } from "uuid";
 
 const GlobalContext = createContext<GlobalContextType>({
   menuItemObject: {
@@ -63,6 +65,29 @@ const GlobalContext = createContext<GlobalContextType>({
     offsetDay: 0,
     setOffsetDay: () => {},
   },
+  selectedAreaStringObject: {
+    selectedAreaString: "",
+    setSelectedAreaString: () => {},
+  },
+  allFilteredHabitsObject: {
+    allFilteredHabits: [],
+    setAllFilteredHabits: () => {},
+  },
+  openDropDownObject: {
+    openDropDown: false,
+    setOpenDropDown: () => {},
+  },
+  dropDownPositionsObject: {
+    dropDownPositions: {
+      top: 0,
+      left: 0,
+    },
+    setDropDownPositions: () => {},
+  },
+  openConfirmationWindowObject: {
+    openConfirmationWindow: false,
+    setOpenConfirmationWindow: () => {},
+  },
 });
 
 function GlobalContextProvider({ children }: { children: ReactNode }) {
@@ -76,9 +101,10 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
     { id: 2, icon: faMoon, isSelected: false },
   ]);
   const [allAreas, setAllAreas] = useState<AreaType[]>([
-    { id: 1, icon: faUsers, name: "All" },
-    { id: 2, icon: faGraduationCap, name: "Study" },
-    { id: 3, icon: faCode, name: "Code" },
+    { _id: uuidv4(), icon: faUsers, name: "All" },
+    { _id: uuidv4(), icon: faGraduationCap, name: "Study" },
+    { _id: uuidv4(), icon: faCode, name: "Code" },
+    { _id: uuidv4(), icon: faBriefcase, name: "Work" },
   ]);
 
   const [openSideBar, setOpenSideBar] = useState(false);
@@ -91,23 +117,44 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
 
   //All Habits logic
   const [allHabits, setAllHabits] = useState<HabitType[]>([]);
+  const [selectedAreaString, setSelectedAreaString] = useState<string>("All");
+  const [allFilteredHabits, setAllFilteredHabits] = useState<HabitType[]>([]);
+
+  //Drop Down
+  const [openDropDown, setOpenDropDown] = useState(false);
+  const [dropDownPositions, setDropDownPositions] = useState({
+    top: 0,
+    left: 0,
+  });
+  const [openConfirmationWindow, setOpenConfirmationWindow] = useState(false);
+
   useEffect(() => {
     function fetchData() {
-      const allHabitsData = [
+      const allHabitsData: HabitType[] = [
         {
-          _id: "",
-          name: "",
+          _id: uuidv4(),
+          name: "habit 1",
           icon: textToIcon("faTools") as IconProp,
-          frequency: [{ type: "Daily", days: ["MON"], number: 1 }],
+          frequency: [{ type: "Daily", days: ["MON", "THU"], number: 1 }],
           notificationTime: "",
           isNotificationOn: false,
-          areas: [],
+          areas: [
+            { _id: uuidv4(), icon: faGraduationCap, name: "Study" },
+            { _id: uuidv4(), icon: faCode, name: "Code" },
+          ],
+          completedDays: [
+            { _id: uuidv4(), date: "02-02-2025" },
+            { _id: uuidv4(), date: "04-02-2025" },
+          ],
         },
       ];
+
       setTimeout(() => {
+        // console.log("Setting habits:", allHabitsData);
         setAllHabits(allHabitsData);
       }, 1000);
     }
+
     fetchData();
   }, []);
 
@@ -142,6 +189,23 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
           setSelectedCurrentDate,
         },
         offsetDayObject: { offsetDay, setOffsetDay },
+        selectedAreaStringObject: { selectedAreaString, setSelectedAreaString },
+        allFilteredHabitsObject: {
+          allFilteredHabits,
+          setAllFilteredHabits,
+        },
+        openDropDownObject: {
+          openDropDown,
+          setOpenDropDown,
+        },
+        dropDownPositionsObject: {
+          dropDownPositions,
+          setDropDownPositions,
+        },
+        openConfirmationWindowObject: {
+          openConfirmationWindow,
+          setOpenConfirmationWindow,
+        },
       }}
     >
       {children}

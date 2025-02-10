@@ -28,7 +28,6 @@ function HabitsContainerTop() {
     }
   }
   useEffect(() => {
-    console.log(offsetDay);
     setSelectedCurrentDate(getDateString(new Date(), offsetDay));
   }, [offsetDay]);
   return (

@@ -42,4 +42,29 @@ export interface GlobalContextType {
     offsetDay: number;
     setOffsetDay: Dispatch<SetStateAction<number>>;
   };
+  selectedAreaStringObject: {
+    selectedAreaString: string;
+    setSelectedAreaString: Dispatch<SetStateAction<string>>;
+  };
+  allFilteredHabitsObject: {
+    allFilteredHabits: HabitType[];
+    setAllFilteredHabits: Dispatch<SetStateAction<HabitType[]>>;
+  };
+  openDropDownObject: {
+    openDropDown: boolean;
+    setOpenDropDown: Dispatch<SetStateAction<boolean>>;
+  };
+  dropDownPositionsObject: {
+    dropDownPositions: {
+      top: number;
+      left: number;
+    };
+    setDropDownPositions: Dispatch<
+      SetStateAction<{ top: number; left: number }>
+    >;
+  };
+  openConfirmationWindowObject: {
+    openConfirmationWindow: boolean;
+    setOpenConfirmationWindow: Dispatch<SetStateAction<boolean>>;
+  };
 }

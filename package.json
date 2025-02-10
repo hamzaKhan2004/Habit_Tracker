@@ -27,7 +27,8 @@
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.1",
     "recharts": "^2.15.0",
-    "svix": "^1.45.1"
+    "svix": "^1.45.1",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -1,5 +1,5 @@
 import { useGlobalContextProivder } from "@/app/contextApi";
-import { defaultColor } from "@/colors";
+import { darkModeColor, defaultColor } from "@/colors";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
@@ -157,12 +157,16 @@ function TimePicker({
   //jsx
   return (
     <div
+      style={{
+        backgroundColor: isDarkMode ? darkModeColor.background : "",
+        color: isDarkMode ? "white" : "",
+      }}
       className={`bg-white text-black w-[413px] top-[89px] left-1/2 transform -translate-x-1/2 z-50 p-7 rounded-md shadow-md ${
-        openTimePickerWindow ? "absolute" : "hidden"
-      }`}
+        isDarkMode ? "shadow-sm shadow-gray-50" : ""
+      }  ${openTimePickerWindow ? "absolute" : "hidden"}`}
     >
       {/* select time + closing icon  */}
-      <span className="font-bold flex justify-between items-center">
+      <span className={`font-bold flex justify-between items-center `}>
         <span>Select Time</span>
         <FontAwesomeIcon
           height={20}
@@ -179,39 +183,48 @@ function TimePicker({
           {/* Hours field  */}
           <input
             value={timeValues[0].text}
-            onClick={() => {
-              updateTimeValues(0);
-            }}
+            onClick={() => updateTimeValues(0)}
             ref={hoursRef}
             onChange={(event) => updateTimeValuesText(event, 0)}
             onBlur={() => handleOnBlur(0)}
             readOnly={!timeValues[0].isSelected}
             style={{
-              backgroundColor: timeValues[0].isSelected
+              backgroundColor: isDarkMode
+                ? timeValues[0].isSelected
+                  ? "#D90429" // selected bg in dark mode
+                  : defaultColor[50] // unselected bg in dark mode
+                : timeValues[0].isSelected
                 ? defaultColor[100]
                 : defaultColor.backgroundSlate,
-              color: timeValues[0].isSelected
+              color: isDarkMode
+                ? "white" // text color in dark mode
+                : timeValues[0].isSelected
                 ? defaultColor.default
                 : defaultColor.textColorGray,
             }}
             className="w-[100px] text-[45px] p-4 rounded-md text-center outline-none"
           />
+
           <span className="text-2xl font-bold">:</span>
           {/* Minutes field  */}
           <input
             value={timeValues[1].text}
-            onClick={() => {
-              updateTimeValues(1);
-            }}
+            onClick={() => updateTimeValues(1)}
             ref={minutesRef}
             onChange={(event) => updateTimeValuesText(event, 1)}
             onBlur={() => handleOnBlur(1)}
             readOnly={!timeValues[1].isSelected}
             style={{
-              backgroundColor: timeValues[1].isSelected
+              backgroundColor: isDarkMode
+                ? timeValues[1].isSelected
+                  ? "#D90429" // selected bg in dark mode
+                  : defaultColor[50] // unselected bg in dark mode
+                : timeValues[1].isSelected
                 ? defaultColor[100]
                 : defaultColor.backgroundSlate,
-              color: timeValues[1].isSelected
+              color: isDarkMode
+                ? "white" // text color in dark mode
+                : timeValues[1].isSelected
                 ? defaultColor.default
                 : defaultColor.textColorGray,
             }}
@@ -226,10 +239,16 @@ function TimePicker({
               key={index}
               onClick={() => updateMeridiemFx(index)}
               style={{
-                backgroundColor: singleMeridiem.isSelected
+                backgroundColor: isDarkMode
+                  ? singleMeridiem.isSelected
+                    ? "#D90429" // selected bg in dark mode
+                    : defaultColor[50] // unselected bg in dark mode
+                  : singleMeridiem.isSelected
                   ? defaultColor[100]
                   : defaultColor.backgroundSlate,
-                color: singleMeridiem.isSelected
+                color: isDarkMode
+                  ? "white"
+                  : singleMeridiem.isSelected
                   ? defaultColor.default
                   : defaultColor.textColorGray,
               }}

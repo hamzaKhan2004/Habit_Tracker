@@ -7,7 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import { defaultColor } from "@/colors";
+import { darkModeColor, defaultColor } from "@/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGlobalContextProivder } from "@/app/contextApi";
 // import { Area } from "recharts";
@@ -37,8 +37,9 @@ export default function MultipleSelectChip({
   onChange: (selectedAreasItems: unknown) => void;
 }) {
   const theme = useTheme();
-  const { allAreasObject } = useGlobalContextProivder();
+  const { allAreasObject, darkModeObject } = useGlobalContextProivder();
   const { allAreas } = allAreasObject;
+  const { isDarkMode } = darkModeObject;
   const [selectedAreas, setSelectedAreas] = React.useState<string[]>([]);
   const [selectedAreasItems, setSelectedAreasItems] = React.useState<unknown>(
     []
@@ -71,7 +72,7 @@ export default function MultipleSelectChip({
   React.useEffect(() => {
     onChange(selectedAreasItems);
 
-    console.log(selectedAreas);
+    // console.log(selectedAreas);
   }, [selectedAreasItems]);
   return (
     <div>
@@ -86,7 +87,10 @@ export default function MultipleSelectChip({
         }}
       >
         <InputLabel
-          sx={{ "&.Mui-focused": { color: defaultColor.default } }}
+          sx={{
+            color: isDarkMode ? "white" : "",
+            "&.Mui-focused": { color: defaultColor.default },
+          }}
           id="demo-multiple-chip-label"
         >
           Choose Your Area...
@@ -102,16 +106,33 @@ export default function MultipleSelectChip({
               id="select-multiple-chip"
               sx={{
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: defaultColor.default,
+                  borderColor: isDarkMode
+                    ? defaultColor.default
+                    : defaultColor.default,
                 },
               }}
               label="Choose your area..."
             />
           }
           renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 0.5,
+              }}
+            >
               {selected.map((value) => (
-                <Chip key={value} label={value} />
+                <Chip
+                  key={value}
+                  label={value}
+                  sx={{
+                    backgroundColor: isDarkMode
+                      ? defaultColor.default
+                      : defaultColor.default,
+                    color: isDarkMode ? darkModeColor.textColor : "white",
+                  }}
+                />
               ))}
             </Box>
           )}
@@ -119,7 +140,7 @@ export default function MultipleSelectChip({
         >
           {filteredAreas.map((area) => (
             <MenuItem
-              key={area.id}
+              key={area._id}
               value={area.name}
               style={getStyles(area.name, selectedAreas, theme)}
             >

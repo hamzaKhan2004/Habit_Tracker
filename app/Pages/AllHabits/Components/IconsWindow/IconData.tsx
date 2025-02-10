@@ -35,6 +35,7 @@ import {
   faDog,
   faCampground,
   faGamepad,
+  faTools,
 } from "@fortawesome/free-solid-svg-icons";
 
 type iconData = {
@@ -152,6 +153,8 @@ export function textToIcon(iconText: string): IconProp | string {
       return faCampground;
     case "faGamepad":
       return faGamepad;
+    case "faTools":
+      return faTools;
     default:
       return "Icon not found";
   }
