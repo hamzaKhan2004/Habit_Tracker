@@ -1,11 +1,9 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import connectToDB from "@/app/lib/connectToDB";
-import User from "@/app/Models/UserSchema";
 
 export async function POST(req: Request) {
-  const SIGNING_SECRET = process.env.WEBHOOK_SECRET;
+  const SIGNING_SECRET = process.env.SIGNING_SECRET;
 
   if (!SIGNING_SECRET) {
     throw new Error(
@@ -53,27 +51,14 @@ export async function POST(req: Request) {
   // For this guide, log payload to console
   const { id } = evt.data;
   const eventType = evt.type;
-  if (eventType === "user.created") {
-    const { id, email_addresses } = evt.data;
-
-    const newUser = {
-      clerkUserId: id,
-      emailAddress: email_addresses[0].email_address,
-    };
-
-    console.log(newUser);
-
-    try {
-      await connectToDB();
-      await User.create(newUser);
-      console.log("user created");
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
   console.log("Webhook payload:", body);
 
+  if (eventType === "user.created") {
+    console.log("User Created");
+  }
+  if (eventType === "user.updated") {
+    console.log("User updated");
+  }
   return new Response("Webhook received", { status: 200 });
 }

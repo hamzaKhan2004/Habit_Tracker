@@ -36,13 +36,21 @@ function HabitsCompleted() {
             <p className="text-sm text-gray-400 w-72 text-center">{`Habit tracking is like a superpower! Don't let it go to waste!`}</p>
           )}
         </div>
-        {allFilteredHabits.map((singleHabit, index) => (
-          <div className="" key={index}>
-            {singleHabit.completedDays.some(
-              (day) => day.date === selectedCurrentDate
-            ) === true && <HabitCard singleHabit={singleHabit} />}
-          </div>
-        ))}
+        {allFilteredHabits
+          .filter(
+            (habit, index, self) =>
+              habit.completedDays.some(
+                (day) => day.date === selectedCurrentDate
+              ) &&
+              self.findIndex(
+                (h) =>
+                  h._id === habit._id &&
+                  h.completedDays.some((d) => d.date === selectedCurrentDate)
+              ) === index
+          )
+          .map((singleHabit, index) => (
+            <HabitCard key={index} singleHabit={singleHabit} />
+          ))}
       </div>
     </div>
   );

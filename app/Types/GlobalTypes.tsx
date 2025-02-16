@@ -2,8 +2,21 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 export type AreaType = {
   _id: string;
-  icon: IconProp;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: any;
   name: string;
+};
+
+export type HabitType = {
+  _id?: string;
+  name: string;
+  icon: IconProp;
+  clerkUserId: string;
+  frequency: FrequencyType[];
+  notificationTime: string;
+  isNotificationOn: boolean;
+  areas: AreaType[];
+  completedDays: CompletedDayType[];
 };
 
 type FrequencyType = {
@@ -12,18 +25,7 @@ type FrequencyType = {
   number: number;
 };
 
-export type HabitType = {
-  _id: string;
-  name: string;
-  icon: IconProp;
-  frequency: FrequencyType[];
-  notificationTime: string;
-  isNotificationOn: boolean;
-  areas: AreaType[];
-  completedDays: CompletedDayType[];
-};
-
 export type CompletedDayType = {
-  _id: string;
+  _id?: string;
   date: string;
 };

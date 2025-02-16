@@ -67,4 +67,8 @@ export interface GlobalContextType {
     openConfirmationWindow: boolean;
     setOpenConfirmationWindow: Dispatch<SetStateAction<boolean>>;
   };
+  selectedItemsObject: {
+    selectedItems: HabitType | AreaType | null;
+    setSelectedItems: Dispatch<SetStateAction<HabitType | AreaType | null>>;
+  };
 }

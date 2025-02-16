@@ -6,13 +6,13 @@ import "./globals.css";
 import GlobalContextProvider from "./contextApi";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const inter = Inter({subsets:["latin"]});
+const inter = Inter({ subsets: ["latin"] });
 
 const poppins = Poppins({
-  subsets:["latin"],
-  variable:"--font-poppins",
-  weight:["100","200","300","400","500","600","700","800","900"],
-})
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,15 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      
-      <ClerkProvider>
-      <GlobalContextProvider>
-        <body className={`${poppins.className}`}>
-          {children}
-        </body>
+    <ClerkProvider>
+      <html lang="en">
+        <GlobalContextProvider>
+          <body className={`${poppins.className}`}>{children}</body>
         </GlobalContextProvider>
-      </ClerkProvider>
-    </html>
+      </html>
+    </ClerkProvider>
   );
 }

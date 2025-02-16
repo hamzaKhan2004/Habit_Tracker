@@ -11,7 +11,7 @@ import Dropdown from "@/app/Dropdown";
 
 function AllHabits() {
   return (
-    <div className="max-lg:flex-col flex-row gap-0 w-full flex relative">
+    <div className="max-lg:flex-col flex-row gap-0 w-full flex relative ">
       <ConfirmationWindow />
       <Dropdown />
       <Toaster />

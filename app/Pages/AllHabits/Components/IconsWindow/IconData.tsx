@@ -36,6 +36,7 @@ import {
   faCampground,
   faGamepad,
   faTools,
+  faGlobe,
 } from "@fortawesome/free-solid-svg-icons";
 
 type iconData = {
@@ -79,6 +80,7 @@ export const iconsData: iconData[] = [
   { faIcon: faDog, isSelected: false }, // Pets/animal care
   { faIcon: faCampground, isSelected: false }, // Camping/outdoors
   { faIcon: faGamepad, isSelected: false }, // Video games
+  { faIcon: faGlobe, isSelected: false },
 ];
 
 export function textToIcon(iconText: string): IconProp | string {
@@ -155,6 +157,90 @@ export function textToIcon(iconText: string): IconProp | string {
       return faGamepad;
     case "faTools":
       return faTools;
+    case "faGlobe":
+      return faGlobe;
+    default:
+      return "Icon not found";
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function iconToText(icon: any): string {
+  switch (icon.iconName) {
+    case "calculator":
+      return "faCalculator";
+    case "flask":
+      return "faFlask";
+    case "book":
+      return "faBook";
+    case "running":
+      return "faRunning";
+    case "dumbbell":
+      return "faDumbbell";
+    case "apple-alt":
+      return "faAppleAlt";
+    case "bed":
+      return "faBed";
+    case "water":
+      return "faWater";
+    case "bicycle":
+      return "faBicycle";
+    case "walking":
+      return "faWalking";
+    case "heartbeat":
+      return "faHeartbeat";
+    case "music":
+      return "faMusic";
+    case "pen":
+      return "faPen";
+    case "code":
+      return "faCode";
+    case "clock":
+      return "faClock";
+    case "check-square":
+      return "faCheckSquare";
+    case "seedling":
+      return "faSeedling";
+    case "thermometer-half":
+      return "faThermometerHalf";
+    case "sun":
+      return "faSun";
+    case "leaf":
+      return "faLeaf";
+    case "bath":
+      return "faBath";
+    case "utensils":
+      return "faUtensils";
+    case "coffee":
+      return "faCoffee";
+    case "smile":
+      return "faSmile";
+    case "brain":
+      return "faBrain";
+    case "paint-brush":
+      return "faPaintBrush";
+    case "shopping-cart":
+      return "faShoppingCart";
+    case "pencil-alt":
+      return "faPencilAlt";
+    case "journal-whills":
+      return "faJournalWhills";
+    case "chess":
+      return "faChess";
+    case "spa":
+      return "faSpa";
+    case "drum":
+      return "faDrum";
+    case "dog":
+      return "faDog";
+    case "campground":
+      return "faCampground";
+    case "gamepad":
+      return "faGamepad";
+    case "tools":
+      return "faTools";
+    case "globe":
+      return "faGlobe";
     default:
       return "Icon not found";
   }

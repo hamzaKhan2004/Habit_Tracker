@@ -51,7 +51,7 @@ function AllHabitsTopBar(){
           <span className='font-light text-[14px] text-gray-400'>welcome back!</span>
         </div>
       </div>
-        <div className="w-[50% flex gap-3 justify-between]">
+        <div className="lg:w-[45%]  flex gap-3 justify-between">
             <AllHabitsSearchBar/>
             <DarkMode/>
           <FontAwesomeIcon onClick={openSideBarFunction} className='m-2 max-xl:flex hidden mt-[13px] cursor-pointer' icon={faBars}/>

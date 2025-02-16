@@ -10,6 +10,7 @@ import Chip from "@mui/material/Chip";
 import { darkModeColor, defaultColor } from "@/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGlobalContextProivder } from "@/app/contextApi";
+import { HabitType } from "@/app/Types/GlobalTypes";
 // import { Area } from "recharts";
 
 const ITEM_HEIGHT = 48;
@@ -37,9 +38,16 @@ export default function MultipleSelectChip({
   onChange: (selectedAreasItems: unknown) => void;
 }) {
   const theme = useTheme();
-  const { allAreasObject, darkModeObject } = useGlobalContextProivder();
+  const {
+    allAreasObject,
+    darkModeObject,
+    selectedItemsObject,
+    habitWindowObject,
+  } = useGlobalContextProivder();
   const { allAreas } = allAreasObject;
   const { isDarkMode } = darkModeObject;
+  const { openHabitWindow } = habitWindowObject;
+  const { selectedItems } = selectedItemsObject;
   const [selectedAreas, setSelectedAreas] = React.useState<string[]>([]);
   const [selectedAreasItems, setSelectedAreasItems] = React.useState<unknown>(
     []
@@ -74,6 +82,23 @@ export default function MultipleSelectChip({
 
     // console.log(selectedAreas);
   }, [selectedAreasItems]);
+
+  React.useEffect(() => {
+    //If we want to edit a habit
+    if (selectedItems) {
+      const habitSelected = selectedItems as HabitType;
+      const { areas } = habitSelected;
+
+      const selectedAreas = areas.map((area) => {
+        return area.name;
+      });
+      setSelectedAreas(selectedAreas);
+    } else {
+      //when we open the habit window, empty the selectedAreas
+      setSelectedAreas([]);
+    }
+  }, [openHabitWindow]);
+
   return (
     <div>
       <FormControl

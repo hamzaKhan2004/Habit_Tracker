@@ -25,6 +25,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { textToIcon } from "./Pages/AllHabits/Components/IconsWindow/IconData";
 import { getDateString } from "./utils/allHabitsUtils/DateFunctions";
 import { v4 as uuidv4 } from "uuid";
+import { useUser } from "@clerk/nextjs";
 
 const GlobalContext = createContext<GlobalContextType>({
   menuItemObject: {
@@ -88,6 +89,10 @@ const GlobalContext = createContext<GlobalContextType>({
     openConfirmationWindow: false,
     setOpenConfirmationWindow: () => {},
   },
+  selectedItemsObject: {
+    selectedItems: null,
+    setSelectedItems: () => {},
+  },
 });
 
 function GlobalContextProvider({ children }: { children: ReactNode }) {
@@ -120,13 +125,18 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
   const [selectedAreaString, setSelectedAreaString] = useState<string>("All");
   const [allFilteredHabits, setAllFilteredHabits] = useState<HabitType[]>([]);
 
-  //Drop Down
+  //Drop Down For Edit And Delete Habit
   const [openDropDown, setOpenDropDown] = useState(false);
   const [dropDownPositions, setDropDownPositions] = useState({
     top: 0,
     left: 0,
   });
   const [openConfirmationWindow, setOpenConfirmationWindow] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<
+    HabitType | AreaType | null
+  >(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isLoaded, isSignedIn, user } = useUser();
 
   useEffect(() => {
     function fetchData() {
@@ -135,12 +145,17 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
           _id: uuidv4(),
           name: "habit 1",
           icon: textToIcon("faTools") as IconProp,
+          clerkUserId: user?.id || "",
           frequency: [{ type: "Daily", days: ["MON", "THU"], number: 1 }],
           notificationTime: "",
           isNotificationOn: false,
           areas: [
-            { _id: uuidv4(), icon: faGraduationCap, name: "Study" },
-            { _id: uuidv4(), icon: faCode, name: "Code" },
+            {
+              _id: uuidv4(),
+              icon: textToIcon("faGraduationCap"),
+              name: "Study",
+            },
+            { _id: uuidv4(), icon: textToIcon("faCode"), name: "Code" },
           ],
           completedDays: [
             { _id: uuidv4(), date: "02-02-2025" },
@@ -155,8 +170,17 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
       }, 1000);
     }
 
+    function fetchAllAreas() {
+      const allAreasData: AreaType[] = [
+        { _id: uuidv4(), icon: textToIcon("faGlobe"), name: "All" },
+        { _id: uuidv4(), icon: textToIcon("faBook"), name: "Study" },
+        { _id: uuidv4(), icon: textToIcon("faCode"), name: "Code" },
+      ];
+      setAllAreas(allAreasData);
+    }
     fetchData();
-  }, []);
+    fetchAllAreas();
+  }, [isSignedIn]);
 
   //Date And OfDay Logic
   const [selectedCurrentDate, setSelectedCurrentDate] = useState(() =>
@@ -205,6 +229,10 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
         openConfirmationWindowObject: {
           openConfirmationWindow,
           setOpenConfirmationWindow,
+        },
+        selectedItemsObject: {
+          selectedItems,
+          setSelectedItems,
         },
       }}
     >

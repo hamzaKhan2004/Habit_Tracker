@@ -16,12 +16,14 @@ function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
     selectedCurrentDayObject,
     openDropDownObject,
     dropDownPositionsObject,
+    selectedItemsObject,
   } = useGlobalContextProivder();
   const { isDarkMode } = darkModeObject;
   const { allHabits, setAllHabits } = allHabitsObject;
   const { setOpenDropDown } = openDropDownObject;
   const { selectedCurrentDate } = selectedCurrentDayObject;
   const { setDropDownPositions } = dropDownPositionsObject;
+  const { setSelectedItems } = selectedItemsObject;
   const [checked, setChecked] = useState(
     singleHabit.completedDays.some((day) => day.date === selectedCurrentDate)
   );
@@ -79,6 +81,8 @@ function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
     setDropDownPositions({ top, left });
     event.stopPropagation();
     setOpenDropDown(true);
+    setSelectedItems(singleHabit);
+    // console.log(singleHabit);
   }
 
   useEffect(() => {

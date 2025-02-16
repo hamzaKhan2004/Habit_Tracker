@@ -71,7 +71,7 @@ function SingleAreaContainer({
   //   console.log(isSelected);
   return (
     <div
-      className={`p-2 px-3 rounded-md flex gap-1 items-center cursor-pointer ${
+      className={`p-2 px-3 rounded-md flex gap-1 items-center cursor-pointer flex-wrap ${
         isSelected ? "bg-customRed text-white" : "text-gray-400"
       }`}
     >

@@ -28,7 +28,7 @@ function HabitsContainerMiddle() {
       .toUpperCase(); // Ensure it's in uppercase
 
     // console.log("Selected day:", getThreeLetterDay);
-    console.log(allHabits);
+    // console.log(allHabits);
 
     let filteredHabitsByArea: HabitType[] = [];
 
@@ -51,6 +51,7 @@ function HabitsContainerMiddle() {
 
     setAllFilteredHabits(filteredHabitsByArea);
   }, [selectedCurrentDate, allHabits, selectedAreaString]);
+
   const isAllHabitsCompleted =
     allFilteredHabits.length > 0 &&
     allFilteredHabits.every((habit) => {
