@@ -8,8 +8,8 @@ export const createOrUpdateUser = async (
   try {
     await connect();
     const user = await User.findOneAndUpdate(
-      { clerkId: id },
-      { $set: { email: email_addresses[0].email_address } }, // Corrected key
+      { clerkUserId: id }, // Corrected field name to match schema
+      { $set: { emailAddress: email_addresses[0].email_address } }, // Corrected field name
       { new: true, upsert: true }
     );
     return user;
