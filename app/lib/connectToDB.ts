@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 let initialized = false;
 
-export const connect = async () => {
+const connect = async () => {
   mongoose.set("strictQuery", true);
   if (initialized) {
     console.log("MongoDB already connected");
@@ -36,4 +36,4 @@ export const connect = async () => {
 //   }
 // }
 
-// export default connectToDB;
+export default connect;

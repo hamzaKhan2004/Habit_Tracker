@@ -1,4 +1,4 @@
-import { connect } from "../lib/connectToDB";
+import connect from "../lib/connectToDB";
 import User from "../Models/UserSchema";
 
 export const createOrUpdateUser = async (
