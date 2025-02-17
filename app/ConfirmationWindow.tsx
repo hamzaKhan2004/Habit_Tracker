@@ -2,7 +2,7 @@
 import React from "react";
 import { useGlobalContextProivder } from "./contextApi";
 import { darkModeColor, defaultColor } from "@/colors";
-import deleteHabit from "./utils/allHabitsUtils/deleteHabit";
+import { deleteHabit } from "./utils/allHabitsUtils/deleteHabit";
 import { AreaType, HabitType } from "./Types/GlobalTypes";
 
 function ConfirmationWindow() {
@@ -29,11 +29,17 @@ function ConfirmationWindow() {
   }
 
   function deleteOption() {
+    console.log("Delete button clicked!");
+    console.log("Selected Items:", selectedItems);
+
     if (isHabitType(selectedItems)) {
-      deleteHabit(allHabits, setAllHabits, selectedItems);
-      setOpenConfirmationWindow(false);
+      deleteHabit(allHabits, setAllHabits, selectedItems).then(() => {
+        setOpenConfirmationWindow(false);
+        setSelectedItems(null);
+      });
     }
   }
+
   return (
     <div
       style={{

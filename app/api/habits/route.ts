@@ -35,3 +35,34 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: error }, { status: 400 });
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function GET(req: any) {
+  try {
+    const clerkId = req.nextUrl.searchParams.get("clerkId");
+    await connectToDB();
+    const habits = await HabitsCollection.find({ clerkUserId: clerkId });
+    return NextResponse.json({ habits: habits });
+  } catch (error) {
+    return NextResponse.json({ error: error }, { status: 400 });
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function DELETE(req: any) {
+  try {
+    const { habitId } = await req.json(); //get projectId from the request body
+
+    const habitToDelete = await HabitsCollection.findOneAndDelete({
+      _id: habitId,
+    });
+    console.log("Habit deleted:", habitToDelete);
+
+    if (!habitToDelete) {
+      return NextResponse.json({ message: "habit not found" }, { status: 404 });
+    }
+    return NextResponse.json({ message: "Habit deleted successfully" });
+  } catch (error) {
+    return NextResponse.json({ message: error });
+  }
+}

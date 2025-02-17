@@ -26,6 +26,7 @@ import { textToIcon } from "./Pages/AllHabits/Components/IconsWindow/IconData";
 import { getDateString } from "./utils/allHabitsUtils/DateFunctions";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
+// import HabitsCollection from "./Models/HabitSchema";
 
 const GlobalContext = createContext<GlobalContextType>({
   menuItemObject: {
@@ -139,50 +140,42 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
   const { isLoaded, isSignedIn, user } = useUser();
 
   useEffect(() => {
-    function fetchData() {
-      const allHabitsData: HabitType[] = [
-        {
-          _id: uuidv4(),
-          name: "habit 1",
-          icon: textToIcon("faTools") as IconProp,
-          clerkUserId: user?.id || "",
-          frequency: [{ type: "Daily", days: ["MON", "THU"], number: 1 }],
-          notificationTime: "",
-          isNotificationOn: false,
-          areas: [
-            {
-              _id: uuidv4(),
-              icon: textToIcon("faGraduationCap"),
-              name: "Study",
-            },
-            { _id: uuidv4(), icon: textToIcon("faCode"), name: "Code" },
-          ],
-          completedDays: [
-            { _id: uuidv4(), date: "02-02-2025" },
-            { _id: uuidv4(), date: "04-02-2025" },
-          ],
-        },
-      ];
+    if (!user?.id) return; // Ensure user ID is available before fetching
 
-      setTimeout(() => {
-        // console.log("Setting habits:", allHabitsData);
-        setAllHabits(allHabitsData);
-      }, 1000);
-    }
+    const fetchAllHabits = async () => {
+      try {
+        const response = await fetch(`/api/habits?clerkId=${user.id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch habits");
+        }
+        const data: { habits: HabitType[] } = await response.json();
 
-    function fetchAllAreas() {
-      const allAreasData: AreaType[] = [
-        { _id: uuidv4(), icon: textToIcon("faGlobe"), name: "All" },
-        { _id: uuidv4(), icon: textToIcon("faBook"), name: "Study" },
-        { _id: uuidv4(), icon: textToIcon("faCode"), name: "Code" },
-      ];
-      setAllAreas(allAreasData);
-    }
-    fetchData();
-    fetchAllAreas();
-  }, [isSignedIn]);
+        // Convert the icon of the habit from string to IconProp
+        const updatedHabits = data.habits.map((habit: HabitType) => ({
+          ...habit,
+          icon:
+            typeof habit.icon === "string"
+              ? (textToIcon(habit.icon) as IconProp)
+              : habit.icon,
+          areas: habit.areas.map((area: AreaType) => ({
+            ...area,
+            icon:
+              typeof area.icon === "string"
+                ? (textToIcon(area.icon) as IconProp)
+                : area.icon,
+          })),
+        }));
 
-  //Date And OfDay Logic
+        console.log(updatedHabits);
+        setAllHabits(updatedHabits);
+      } catch (error) {
+        console.log("Error fetching habits: ", error);
+      }
+    };
+
+    fetchAllHabits();
+  }, [user?.id]); // Depend on user ID
+
   const [selectedCurrentDate, setSelectedCurrentDate] = useState(() =>
     getDateString(new Date())
   );

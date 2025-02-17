@@ -32,8 +32,13 @@ export async function addNewHabit({
     });
 
     if (!response.ok) {
-      throw new Error("Failed to add habit");
+      const errorText = await response.text(); // Capture error message from API response
+      console.error("API Error:", errorText, "Status:", response.status);
+      throw new Error(
+        `Failed to add habit. Server responded with: ${errorText}`
+      );
     }
+
     const data = await response.json();
     console.log("API Response:", data, "Status:", response.status);
     //Extract the _id from the response
@@ -43,9 +48,8 @@ export async function addNewHabit({
     //Add the updated habit to the allHabits array
     setAllHabits([...allHabits, updatedIdOfHabit]);
     toast.success("Habit add successfully!");
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     console.error("Error adding habit:", error);
-    toast.error("Somthing went wrong!");
+    toast.error("Somthing went wrong! try again");
   }
 }
