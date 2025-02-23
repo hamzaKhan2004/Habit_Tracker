@@ -53,6 +53,7 @@ export async function DELETE(req: any) {
   try {
     const { habitId } = await req.json(); //get projectId from the request body
 
+    await connectToDB();
     const habitToDelete = await HabitsCollection.findOneAndDelete({
       _id: habitId,
     });
@@ -64,5 +65,55 @@ export async function DELETE(req: any) {
     return NextResponse.json({ message: "Habit deleted successfully" });
   } catch (error) {
     return NextResponse.json({ message: error });
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function PUT(request: any) {
+  try {
+    const habitId = request.nextUrl.searchParams.get("habitId");
+    const {
+      name,
+      icon,
+      frequency,
+      notificationTime,
+      isNotificationOn,
+      areas,
+      completedDays,
+    } = await request.json();
+
+    if (!habitId) {
+      return NextResponse.json(
+        { message: "Habit Id is required" },
+        { status: 400 }
+      );
+    }
+    await connectToDB();
+
+    const updatedHabit = await HabitsCollection.findOneAndUpdate(
+      { _id: habitId },
+      {
+        $set: {
+          name,
+          icon,
+          frequency,
+          notificationTime,
+          isNotificationOn,
+          areas,
+          completedDays,
+        },
+      },
+      { returnDocument: "after" } //Return the updated document
+    );
+    return NextResponse.json({
+      message: "Habit has been updated succefully",
+      habit: updatedHabit.value,
+    });
+  } catch (error) {
+    console.log("Error updating habit:", error);
+    return NextResponse.json(
+      { message: "An error occured while updating the habit" },
+      { status: 500 }
+    );
   }
 }

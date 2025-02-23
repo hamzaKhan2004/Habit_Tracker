@@ -166,20 +166,48 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
           })),
         }));
 
-        console.log(updatedHabits);
-        setAllHabits(updatedHabits);
+        // console.log(updatedHabits);
+        const updatedHabitsWithAreas = updatedHabits.map((habit: HabitType) => {
+          const updatedAreas = habit.areas.map((area: AreaType) => {
+            if (typeof area.icon === "string") {
+              return {
+                ...area,
+                icon: textToIcon(area.icon) as IconProp,
+              };
+            }
+            return area;
+          });
+          return { ...habit, areas: updatedAreas };
+        });
+
+        setAllHabits(updatedHabitsWithAreas);
       } catch (error) {
         console.log("Error fetching habits: ", error);
       }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function fetchAllAreas() {
+      const allAreasData: AreaType[] = [
+        { _id: uuidv4(), icon: textToIcon("faGlobe"), name: "All" },
+        { _id: uuidv4(), icon: textToIcon("faBook"), name: "Study" },
+        { _id: uuidv4(), icon: textToIcon("faCode"), name: "Code" },
+      ];
+      setAllAreas(allAreasData);
+    }
     fetchAllHabits();
+    // fetchAllAreas();
   }, [user?.id]); // Depend on user ID
 
   const [selectedCurrentDate, setSelectedCurrentDate] = useState(() =>
     getDateString(new Date())
   );
   const [offsetDay, setOffsetDay] = useState(0);
+
+  useEffect(() => {
+    setOpenSideBar(false);
+  }, [menuItems]);
+
   return (
     <GlobalContext.Provider
       value={{

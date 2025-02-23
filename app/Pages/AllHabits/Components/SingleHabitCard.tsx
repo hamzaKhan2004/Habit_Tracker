@@ -8,6 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { convertIconsToTextOfHabits } from "@/app/utils/allHabitsUtils/editHabit";
+import { iconToText } from "./IconsWindow/IconData";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
   const {
@@ -48,6 +51,10 @@ function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
       completedDays: [...singleHabit.completedDays, completedDay],
     };
 
+    //server
+    const habitToUpdateInTheServer = convertIconsToTextOfHabits(updatedHabits);
+    editTheHabitInServer(habitToUpdateInTheServer);
+
     const updateAllHabits: HabitType[] = allHabits.map((habit) => {
       if (habit._id === updatedHabits._id) {
         return updatedHabits;
@@ -58,15 +65,20 @@ function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
     setAllHabits(updateAllHabits);
   }
   function uncheckTheHabit() {
-    const updateHabits: HabitType = {
+    const updatedHabits: HabitType = {
       ...singleHabit,
       completedDays: singleHabit.completedDays.filter(
         (day) => day.date !== selectedCurrentDate
       ),
     };
+
+    //server
+    const habitToUpdateInTheServer = convertIconsToTextOfHabits(updatedHabits);
+    editTheHabitInServer(habitToUpdateInTheServer);
+
     const updateAllHabits: HabitType[] = allHabits.map((habit) => {
-      if (habit._id === updateHabits._id) {
-        return updateHabits;
+      if (habit._id === updatedHabits._id) {
+        return updatedHabits;
       } else {
         return habit;
       }
@@ -152,17 +164,55 @@ function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
         {/* div for the three dots button  */}
         <div className="w-10 flex items-center justify-center">
           <IconButton onClick={handleClickThreeDots}>
-            <MoreVertIcon
-              //   onClick={() => {
-              //     setOpenDropDown(true);
-              //   }}
-              sx={{ color: isDarkMode ? "white" : "gray" }}
-            />
+            <MoreVertIcon sx={{ color: isDarkMode ? "white" : "gray" }} />
           </IconButton>
         </div>
       </div>
     </div>
   );
+}
+
+async function editTheHabitInServer(habit: HabitType) {
+  try {
+    if (!habit._id) {
+      console.error("Error: Habit ID is missing.");
+      return;
+    }
+
+    // Convert the icon to a string before sending
+    // const updatedHabit = {
+    //   ...habit,
+    //   icon: iconToText(habit.icon as IconProp), // Explicitly cast it
+    //   areas: habit.areas.map((area) => ({
+    //     ...area,
+    //     icon: iconToText(area.icon as IconProp), // Explicitly cast it
+    //   })),
+    // };
+
+    const response = await fetch(`/api/habits?habitId=${habit._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: habit.name,
+        icon: habit.icon,
+        areas: habit.areas,
+        frequenct: habit.frequency,
+        notificationTime: habit.notificationTime,
+        isNotificationOn: habit.isNotificationOn,
+        completedDays: habit.completedDays,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Failed to update habit:", errorData);
+      return;
+    }
+
+    console.log("Habit updated successfully!");
+  } catch (error) {
+    console.error("Error updating habit:", error);
+  }
 }
 
 export default HabitCard;

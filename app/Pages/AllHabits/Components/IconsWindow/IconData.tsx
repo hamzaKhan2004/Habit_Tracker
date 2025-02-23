@@ -1,4 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+// Regular icons if you need them
+import {
+  faQuestionCircle,
+  faQuestionCircle as faQuestionRegular,
+} from "@fortawesome/free-regular-svg-icons";
+
 import {
   faCalculator,
   faFlask,
@@ -83,165 +90,65 @@ export const iconsData: iconData[] = [
   { faIcon: faGlobe, isSelected: false },
 ];
 
-export function textToIcon(iconText: string): IconProp | string {
-  switch (iconText) {
-    case "faCalculator":
-      return faCalculator;
-    case "faFlask":
-      return faFlask;
-    case "faBook":
-      return faBook;
-    case "faRunning":
-      return faRunning;
-    case "faDumbbell":
-      return faDumbbell;
-    case "faAppleAlt":
-      return faAppleAlt;
-    case "faBed":
-      return faBed;
-    case "faWater":
-      return faWater;
-    case "faBicycle":
-      return faBicycle;
-    case "faWalking":
-      return faWalking;
-    case "faHeartbeat":
-      return faHeartbeat;
-    case "faMusic":
-      return faMusic;
-    case "faPen":
-      return faPen;
-    case "faCode":
-      return faCode;
-    case "faClock":
-      return faClock;
-    case "faCheckSquare":
-      return faCheckSquare;
-    case "faSeedling":
-      return faSeedling;
-    case "faThermometerHalf":
-      return faThermometerHalf;
-    case "faSun":
-      return faSun;
-    case "faLeaf":
-      return faLeaf;
-    case "faBath":
-      return faBath;
-    case "faUtensils":
-      return faUtensils;
-    case "faCoffee":
-      return faCoffee;
-    case "faSmile":
-      return faSmile;
-    case "faBrain":
-      return faBrain;
-    case "faPaintBrush":
-      return faPaintBrush;
-    case "faShoppingCart":
-      return faShoppingCart;
-    case "faPencilAlt":
-      return faPencilAlt;
-    case "faJournalWhills":
-      return faJournalWhills;
-    case "faChess":
-      return faChess;
-    case "faSpa":
-      return faSpa;
-    case "faDrum":
-      return faDrum;
-    case "faDog":
-      return faDog;
-    case "faCampground":
-      return faCampground;
-    case "faGamepad":
-      return faGamepad;
-    case "faTools":
-      return faTools;
-    case "faGlobe":
-      return faGlobe;
-    default:
-      return "Icon not found";
+const iconMap: Record<string, IconProp> = {
+  faCalculator: faCalculator,
+  faFlask: faFlask,
+  faBook: faBook,
+  faRunning: faRunning,
+  faDumbbell: faDumbbell,
+  faAppleAlt: faAppleAlt,
+  faBed: faBed,
+  faWater: faWater,
+  faBicycle: faBicycle,
+  faWalking: faWalking,
+  faHeartbeat: faHeartbeat,
+  faMusic: faMusic,
+  faPen: faPen,
+  faCode: faCode,
+  faClock: faClock,
+  faCheckSquare: faCheckSquare,
+  faSeedling: faSeedling,
+  faThermometerHalf: faThermometerHalf,
+  faSun: faSun,
+  faLeaf: faLeaf,
+  faBath: faBath,
+  faUtensils: faUtensils,
+  faCoffee: faCoffee,
+  faSmile: faSmile,
+  faBrain: faBrain,
+  faPaintBrush: faPaintBrush,
+  faShoppingCart: faShoppingCart,
+  faPencilAlt: faPencilAlt,
+  faJournalWhills: faJournalWhills,
+  faChess: faChess,
+  faSpa: faSpa,
+  faDrum: faDrum,
+  faDog: faDog,
+  faCampground: faCampground,
+  faGamepad: faGamepad,
+  faTools: faTools,
+  faGlobe: faGlobe,
+  // Regular version of question mark
+  faQuestionCircle: faQuestionRegular,
+};
+
+// ✅ Fixed function to handle prefix and correct mapping
+export function textToIcon(iconText: string, prefix: string = "fas"): IconProp {
+  // Normalize prefix
+  if (prefix === "far") {
+    return faQuestionRegular;
   }
+
+  // Lookup icon
+  return iconMap[iconText] || faQuestionCircle;
 }
 
+// ✅ Updated `iconToText` function
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function iconToText(icon: any): string {
-  switch (icon.iconName) {
-    case "calculator":
-      return "faCalculator";
-    case "flask":
-      return "faFlask";
-    case "book":
-      return "faBook";
-    case "running":
-      return "faRunning";
-    case "dumbbell":
-      return "faDumbbell";
-    case "apple-alt":
-      return "faAppleAlt";
-    case "bed":
-      return "faBed";
-    case "water":
-      return "faWater";
-    case "bicycle":
-      return "faBicycle";
-    case "walking":
-      return "faWalking";
-    case "heartbeat":
-      return "faHeartbeat";
-    case "music":
-      return "faMusic";
-    case "pen":
-      return "faPen";
-    case "code":
-      return "faCode";
-    case "clock":
-      return "faClock";
-    case "check-square":
-      return "faCheckSquare";
-    case "seedling":
-      return "faSeedling";
-    case "thermometer-half":
-      return "faThermometerHalf";
-    case "sun":
-      return "faSun";
-    case "leaf":
-      return "faLeaf";
-    case "bath":
-      return "faBath";
-    case "utensils":
-      return "faUtensils";
-    case "coffee":
-      return "faCoffee";
-    case "smile":
-      return "faSmile";
-    case "brain":
-      return "faBrain";
-    case "paint-brush":
-      return "faPaintBrush";
-    case "shopping-cart":
-      return "faShoppingCart";
-    case "pencil-alt":
-      return "faPencilAlt";
-    case "journal-whills":
-      return "faJournalWhills";
-    case "chess":
-      return "faChess";
-    case "spa":
-      return "faSpa";
-    case "drum":
-      return "faDrum";
-    case "dog":
-      return "faDog";
-    case "campground":
-      return "faCampground";
-    case "gamepad":
-      return "faGamepad";
-    case "tools":
-      return "faTools";
-    case "globe":
-      return "faGlobe";
-    default:
-      return "Icon not found";
+  if (!icon || !icon.iconName) {
+    return "";
   }
+
+  return icon.iconName; // Store only the icon name in DB
 }

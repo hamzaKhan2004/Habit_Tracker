@@ -3,7 +3,8 @@ import React from "react";
 import { useGlobalContextProivder } from "./contextApi";
 import { darkModeColor, defaultColor } from "@/colors";
 import { deleteHabit } from "./utils/allHabitsUtils/deleteHabit";
-import { AreaType, HabitType } from "./Types/GlobalTypes";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { HabitType } from "./Types/GlobalTypes";
 
 function ConfirmationWindow() {
   const {
@@ -12,31 +13,29 @@ function ConfirmationWindow() {
     darkModeObject,
     selectedItemsObject,
   } = useGlobalContextProivder();
+
   const { selectedItems, setSelectedItems } = selectedItemsObject;
   const { allHabits, setAllHabits } = allHabitsObject;
   const { openConfirmationWindow, setOpenConfirmationWindow } =
     openConfirmationWindowObject;
   const { isDarkMode } = darkModeObject;
-  // console.log(openConfirmationWindow);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function isAreaType(item: any): item is AreaType {
-    return "name" in item && "icon" in item && !("frequency" in item);
-  }
+  async function deleteOption() {
+    if (!selectedItems || !selectedItems._id) {
+      console.error("Error: No habit selected or missing ID.");
+      return;
+    }
 
-  function isHabitType(item: any): item is HabitType {
-    return "frequency" in item && "notificationTime" in item;
-  }
+    console.log("Attempting to delete:", selectedItems._id);
 
-  function deleteOption() {
-    console.log("Delete button clicked!");
-    console.log("Selected Items:", selectedItems);
+    const response = await deleteHabit(allHabits, setAllHabits, selectedItems);
 
-    if (isHabitType(selectedItems)) {
-      deleteHabit(allHabits, setAllHabits, selectedItems).then(() => {
-        setOpenConfirmationWindow(false);
-        setSelectedItems(null);
-      });
+    if (response?.success) {
+      setOpenConfirmationWindow(false);
+      setSelectedItems(null);
+      console.log("Habit deleted successfully, closing confirmation window.");
+    } else {
+      console.error("Failed to delete habit.");
     }
   }
 
@@ -60,7 +59,7 @@ function ConfirmationWindow() {
         openConfirmationWindow ? "fixed" : "hidden"
       }`}
     >
-      <span className="font-bold text-xl">{`Are you sure?`}</span>
+      <span className="font-bold text-xl">Are you sure?</span>
       <span className="text-center text-[13px] opacity-75">
         Are you sure you want to delete this item?
         <br />
@@ -74,11 +73,11 @@ function ConfirmationWindow() {
           }}
           className="border text-[13px] w-full px-10 p-3 rounded-md"
         >
-          Cancle
+          Cancel
         </button>
 
         <button
-          onClick={() => deleteOption()}
+          onClick={deleteOption}
           className="text-[13px] w-full px-10 p-3 rounded-md text-white bg-customRed"
         >
           Delete

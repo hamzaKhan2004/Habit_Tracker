@@ -3,6 +3,7 @@ import React from "react";
 import toast from "react-hot-toast";
 import { iconToText } from "@/app/Pages/AllHabits/Components/IconsWindow/IconData";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import scheduleNotifications from "../notificationFunctions";
 export async function addNewHabit({
   allHabits,
   setAllHabits,
@@ -41,12 +42,25 @@ export async function addNewHabit({
 
     const data = await response.json();
     console.log("API Response:", data, "Status:", response.status);
+
     //Extract the _id from the response
     const { _id } = data.habit;
+
     //update the _id of the habit
     const updatedIdOfHabit = { ...habit, _id: _id };
+
     //Add the updated habit to the allHabits array
     setAllHabits([...allHabits, updatedIdOfHabit]);
+
+    if (updatedIdOfHabit.isNotificationOn) {
+      //notificationTime :"09:49 PM"
+      //days ["MON","WED","FRI"]
+      scheduleNotifications(
+        updateHabit.notificationTime,
+        updateHabit.frequency[0].days,
+        updateHabit.name
+      );
+    }
     toast.success("Habit add successfully!");
   } catch (error) {
     console.error("Error adding habit:", error);
