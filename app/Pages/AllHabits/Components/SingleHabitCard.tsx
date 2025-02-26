@@ -9,6 +9,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { convertIconsToTextOfHabits } from "@/app/utils/allHabitsUtils/editHabit";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 // import { iconToText } from "./IconsWindow/IconData";
 // import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
@@ -53,7 +54,10 @@ function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
 
     //server
     const habitToUpdateInTheServer = convertIconsToTextOfHabits(updatedHabits);
-    editTheHabitInServer(habitToUpdateInTheServer);
+    editTheHabitInServer({
+      ...habitToUpdateInTheServer,
+      icon: habitToUpdateInTheServer.icon as IconProp,
+    });
 
     const updateAllHabits: HabitType[] = allHabits.map((habit) => {
       if (habit._id === updatedHabits._id) {
@@ -74,7 +78,10 @@ function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
 
     //server
     const habitToUpdateInTheServer = convertIconsToTextOfHabits(updatedHabits);
-    editTheHabitInServer(habitToUpdateInTheServer);
+    editTheHabitInServer({
+      ...habitToUpdateInTheServer,
+      icon: habitToUpdateInTheServer.icon as IconProp,
+    });
 
     const updateAllHabits: HabitType[] = allHabits.map((habit) => {
       if (habit._id === updatedHabits._id) {
