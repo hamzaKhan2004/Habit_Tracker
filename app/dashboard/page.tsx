@@ -11,18 +11,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { darkModeColor, defaultColor } from "@/colors";
 
-export function sendNotifications(habitName: string) {
-  if ("Notification" in window && Notification.permission === "granted") {
-    const notification = new Notification("Habit Tracker", {
-      body: `It's time to do your habit : ${habitName}`,
-    });
 
-    //Close the notification after a specified time (e.g. 5 seconds)
-    setTimeout(() => {
-      notification.close();
-    }, 5000);
-  }
-}
 
 function Dashboard() {
   const { menuItemObject } = useGlobalContextProivder();

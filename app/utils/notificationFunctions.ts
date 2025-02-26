@@ -1,4 +1,4 @@
-import { sendNotifications } from "../dashboard/page";
+import { sendNotifications } from "../dashboard/notificationMessage";
 
 // sendNotifications
 export default function scheduleNotifications(
