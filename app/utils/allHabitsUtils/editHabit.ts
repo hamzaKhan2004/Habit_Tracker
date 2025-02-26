@@ -42,7 +42,19 @@ async function editHabit({
     copyAllHabits[findTheHabit] = habit;
 
     //convert the icon from iconprop to string in the icon property and in the areas property
-    const updatedHabit = convertIconsToTextOfHabits(habit);
+    const { icon, areas } = habit;
+    const habitIconToText = iconToText(icon as IconProp);
+
+    //Convert the icons in the areas array
+    const areasCopy = areas.map((area) => ({
+      ...area,
+      icon: iconToText(area.icon as IconProp),
+    }));
+
+    //update the icon and the areas in the habit object to update in the db
+    const updatedHabit = { ...habit, icon: habitIconToText, areas: areasCopy };
+    //convert the icon from iconprop to string in the icon property and in the areas property
+    // const updatedHabit = convertIconsToTextOfHabits(habit);
 
     // console.log(currentHabitSelected._id);
 
