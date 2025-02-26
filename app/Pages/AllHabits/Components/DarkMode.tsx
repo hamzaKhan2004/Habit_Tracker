@@ -21,6 +21,7 @@ function DarkMode() {
       );
       setDarkModeItems(updatedItems);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run only once on component mount
 
   function handleClickedItem(singleItemIndex: number) {
@@ -47,6 +48,7 @@ function DarkMode() {
       if (singleItem.id === 1 && singleItem.isSelected) setDarkMode(false);
       if (singleItem.id === 2 && singleItem.isSelected) setDarkMode(true);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [darkModeItems]);
 
   return (

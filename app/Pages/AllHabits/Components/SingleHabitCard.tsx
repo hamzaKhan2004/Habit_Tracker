@@ -9,8 +9,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { convertIconsToTextOfHabits } from "@/app/utils/allHabitsUtils/editHabit";
-import { iconToText } from "./IconsWindow/IconData";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
+// import { iconToText } from "./IconsWindow/IconData";
+// import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 function HabitCard({ singleHabit }: { singleHabit: HabitType }) {
   const {
@@ -196,7 +196,7 @@ async function editTheHabitInServer(habit: HabitType) {
         name: habit.name,
         icon: habit.icon,
         areas: habit.areas,
-        frequenct: habit.frequency,
+        frequency: habit.frequency,
         notificationTime: habit.notificationTime,
         isNotificationOn: habit.isNotificationOn,
         completedDays: habit.completedDays,

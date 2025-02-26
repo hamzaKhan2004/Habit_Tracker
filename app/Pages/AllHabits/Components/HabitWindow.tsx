@@ -94,6 +94,7 @@ function HabitWindow() {
         setHabitItem(selectedItems as HabitType);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
 
   useEffect(() => {
@@ -162,6 +163,7 @@ function HabitWindow() {
     const copyHabitItem = { ...habitItem };
     copyHabitItem.icon = iconSelected;
     setHabitItem(copyHabitItem);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [iconSelected]);
 
   useEffect(() => {
@@ -178,6 +180,7 @@ function HabitWindow() {
         completedDays: [],
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
 
   return (
@@ -230,6 +233,7 @@ function Header() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedItems ? setHeader("Edit Habit") : setHeader("Add New Habit");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
   return (
     <div className="flex justify-between items-center mb-4">
@@ -287,6 +291,7 @@ function InputNameAndIconButton({
     } else {
       onUpdateHabitName(""); // Clear input when closing
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
 
   useEffect(() => {
@@ -369,11 +374,13 @@ function Repeat({
   //days
   useEffect(() => {
     onChangeDaysOption(allDays);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allDays]);
 
   //weeks
   useEffect(() => {
     onChangeWeeksOption(weeks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weeks]);
 
   // Find the selected option
@@ -410,6 +417,7 @@ function Repeat({
       //Update the repeatOptions array
       setRepeatOptions(copyRepeatOptions);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
 
   useEffect(() => {
@@ -514,6 +522,7 @@ function DailyOptions({
         setAllDays(updateSelectedDays);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
   return (
     <div className="mt-5 flex flex-col gap-4">
@@ -639,6 +648,7 @@ function Reminder({
     } else {
       setIsOn(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
 
   return (
@@ -696,6 +706,7 @@ function SaveButton({ habit }: { habit: HabitType }) {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedItems ? setButtonText("Edit Habit") : setButtonText("Add a Habit");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
 
   function checkHabitObject() {

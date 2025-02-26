@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 // Regular icons if you need them
 import {

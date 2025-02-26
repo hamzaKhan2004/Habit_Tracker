@@ -70,6 +70,7 @@ function Dropdown() {
     return () => {
       document.removeEventListener("click", handleOutSideClick);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openDropDown]);
 
   return (
