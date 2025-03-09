@@ -6,6 +6,7 @@ import { AreaType } from "@/app/Types/GlobalTypes";
 import addNewArea from "@/app/utils/allAreaUtils/addNewArea";
 import { darkModeColor, defaultColor } from "@/colors";
 import DataFormModal from "@/Modal";
+import { useUser } from "@clerk/nextjs";
 import { faFlask } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -22,41 +23,50 @@ export default function AllAreasContainer() {
     selectedItemsObject: { selectedItems },
     openIconWindowObject: { setOpenIconWindow, iconSelected },
   } = useGlobalContextProivder();
+  const { user } = useUser();
   const [areaItem, setAreaItem] = useState<AreaType>({
     _id: "",
-    name: "",
     icon: faFlask,
+    clerkUserId: "",
+    name: "",
   });
 
   //   const [isOpen, setIsOpen] = useState(true);
   function handleOnClose() {
     setOpenAreaForm(!openAreaForm);
   }
-
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     setAreaItem({
       ...areaItem,
       name: event.target.value,
     });
   }
+
   function handleOnClick() {
     if (!selectedItems) {
       if (areaItem.name.trim() === "") {
-        return toast.error("The area name filed is still empty");
+        return toast.error("The area name field is still empty");
       }
 
-      //check if  there's no area with the same name
+      // Check if the area already exists
       const areaExist = allAreas.some(
         (singleArea) =>
           singleArea.name.toLocaleLowerCase() ===
           areaItem.name.toLocaleLowerCase()
       );
+
       if (areaExist) {
         toast.error("The area already exists");
         return;
       }
+
       try {
-        addNewArea({ allAreas, setAllAreas, areaItem });
+        // Ensure `clerkUserId` is passed
+        addNewArea({
+          allAreas,
+          setAllAreas,
+          areaItem: { ...areaItem, clerkUserId: user?.id || "" }, // Fetch Clerk user ID
+        });
         setOpenAreaForm(false);
       } catch (error) {
         console.log(error);

@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 export type AreaType = {
-  _id: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _id?: string;
   icon: any;
+  clerkUserId: string;
   name: string;
 };
 
 export type HabitType = {
   _id?: string;
   name: string;
-  icon: IconProp;
+  icon: any;
   clerkUserId: string;
   frequency: FrequencyType[];
   notificationTime: string;

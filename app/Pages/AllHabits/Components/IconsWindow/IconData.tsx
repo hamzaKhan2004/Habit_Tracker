@@ -138,14 +138,15 @@ const iconMap: Record<string, IconProp> = {
 };
 
 // ✅ Fixed function to handle prefix and correct mapping
-export function textToIcon(iconText: string, prefix: string = "fas"): IconProp {
-  // Normalize prefix
-  if (prefix === "far") {
-    return faQuestionRegular;
-  }
+export function textToIcon(iconText: string): IconProp {
+  if (!iconText) return faQuestionCircle; // Default icon if missing
 
-  // Lookup icon
-  return iconMap[iconText] || faQuestionCircle;
+  // Convert first letter to uppercase & add "fa" prefix
+  const formattedIconText = `fa${iconText
+    .charAt(0)
+    .toUpperCase()}${iconText.slice(1)}`;
+
+  return iconMap[formattedIconText] || faQuestionCircle;
 }
 
 // ✅ Updated `iconToText` function

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, {
@@ -14,12 +16,16 @@ import { faMoon, faSun } from "@fortawesome/free-regular-svg-icons";
 import {
   faChartSimple,
   faFlask,
+  faGlobe,
   faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { DarkModeItem } from "./Types/DarkModeType";
 import { AreaType, HabitType } from "./Types/GlobalTypes";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { textToIcon } from "./Pages/AllHabits/Components/IconsWindow/IconData";
+import {
+  iconToText,
+  textToIcon,
+} from "./Pages/AllHabits/Components/IconsWindow/IconData";
 import { getDateString } from "./utils/allHabitsUtils/DateFunctions";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
@@ -207,22 +213,71 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    function fetchAllAreas() {
-      const allAreasData: AreaType[] = [
-        { _id: uuidv4(), icon: textToIcon("faGlobe"), name: "All" }, //new logic
-        { _id: uuidv4(), icon: textToIcon("faBook"), name: "Study" },
-        { _id: uuidv4(), icon: textToIcon("faCode"), name: "Code" },
-        { _id: uuidv4(), icon: textToIcon("faBriefcase"), name: "Work" },
-      ];
-      setAllAreas(allAreasData);
+    //Dynamic fetching the areas
+    async function fetchAllAreas() {
+      try {
+        const response = await fetch(`/api/areas?clerkId=${user?.id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch areas");
+        }
+        let data: { areas: AreaType[] } = await response.json();
+
+        // 🛠️ If no areas exist, add the "All" area
+        if (data.areas.length === 0) {
+          const allArea = await addTheAllAreas(); // Add "All"
+
+          if (allArea) {
+            // 🛠️ Refetch areas after adding "All"
+            const newResponse = await fetch(`/api/areas?clerkId=${user?.id}`);
+            const newData: { areas: AreaType[] } = await newResponse.json();
+            data = newData; // Update data with new areas
+          }
+        }
+
+        // Convert icon string to IconProp
+        const updatedAreas = data.areas.map((area: AreaType) => ({
+          ...area,
+          icon:
+            typeof area.icon === "string" ? textToIcon(area.icon) : area.icon,
+        }));
+
+        setAllAreas(updatedAreas);
+      } catch (error) {
+        console.log("Error In fetchAllAreas Function :", error);
+      }
     }
+
     //new logic
     if (isLoaded && isSignedIn) {
       fetchAllHabits();
+      fetchAllAreas();
     }
     // fetchAllHabits();
-    fetchAllAreas();
   }, [isLoaded, isSignedIn, user?.id]); // Depend on user ID
+  async function addTheAllAreas() {
+    const allArea = {
+      icon: iconToText(faGlobe),
+      name: "All",
+      clerkUserId: user?.id as string,
+    };
+
+    try {
+      const response = await fetch("/api/areas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(allArea),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add an area");
+      }
+
+      const data = await response.json();
+      return { ...allArea, _id: data.area._id }; // 🛠️ Return updated area with ID
+    } catch (error) {
+      console.log("Error In addTheAllAreas Function :", error);
+    }
+  }
 
   const [selectedCurrentDate, setSelectedCurrentDate] = useState(() =>
     getDateString(new Date())
