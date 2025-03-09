@@ -46,7 +46,7 @@ export default function StatisticsBoard() {
 
   useEffect(() => {
     const dateCounts: { [key: string]: number } = {};
-    console.log("All Habits:", allHabits);
+    // console.log("All Habits:", allHabits);
 
     // Count completed habits per date
     allHabits.forEach((habit) => {
@@ -58,7 +58,7 @@ export default function StatisticsBoard() {
       }
     });
 
-    console.log("Date Counts (Completed Days Per Date):", dateCounts);
+    // console.log("Date Counts (Completed Days Per Date):", dateCounts);
 
     let perfectDayCount = 0;
     const totalHabitsInEachDay: { [key: string]: number } = {};
@@ -66,7 +66,7 @@ export default function StatisticsBoard() {
 
     for (const date of uniqueDates) {
       const dayShort = getCurrentDayName(date).slice(0, 3).toUpperCase(); // Ensure uppercase (e.g., "SUN")
-      console.log(`Processing date: ${date}, dayShort: ${dayShort}`);
+      //   console.log(`Processing date: ${date}, dayShort: ${dayShort}`);
 
       // Filter habits scheduled for this day
       const scheduledHabits = allHabits.filter((habit) => {
@@ -81,10 +81,10 @@ export default function StatisticsBoard() {
         return false; // If frequency is undefined or empty, the habit is not scheduled
       });
 
-      console.log(
-        `Habits scheduled for ${date} (${dayShort}):`,
-        scheduledHabits
-      );
+      //   console.log(
+      //     `Habits scheduled for ${date} (${dayShort}):`,
+      //     scheduledHabits
+      //   );
 
       totalHabitsInEachDay[date] = scheduledHabits.length; // Store count of scheduled habits
 
@@ -94,8 +94,8 @@ export default function StatisticsBoard() {
       }
     }
 
-    console.log("Total Habits Scheduled Per Date:", totalHabitsInEachDay);
-    console.log("Final Perfect Day Count:", perfectDayCount);
+    // console.log("Total Habits Scheduled Per Date:", totalHabitsInEachDay);
+    // console.log("Final Perfect Day Count:", perfectDayCount);
 
     const totalCompletedHabits = Object.values(dateCounts).reduce(
       (sum, val) => sum + val,
@@ -128,7 +128,7 @@ export default function StatisticsBoard() {
         backgroundColor: isDarkMode ? darkModeColor.background : "white",
         color: isDarkMode ? darkModeColor.textColor : "black",
       }}
-      className="p-5 mt-4 rounded-md grid grid-cols-4 gap-4 max-sm:grid-cols-3"
+      className="p-5 mt-4  rounded-md grid grid-cols-4 gap-4 max-sm:grid-cols-3"
     >
       {filteredStatisticsCard.map((singleCard, singleIndex) => (
         <div
@@ -149,7 +149,7 @@ export default function StatisticsBoard() {
   );
 }
 
-function calculateStreak(habit: HabitType): number {
+export function calculateStreak(habit: HabitType): number {
   function getDayOfWeek(dateString: string): string {
     const date = new Date(dateString);
     const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];

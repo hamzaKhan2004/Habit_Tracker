@@ -389,35 +389,29 @@ function Repeat({
   // )?.name;
 
   useEffect(() => {
-    //If the selectedItems is not null, it mens that we are going to edit the habit
     if (selectedItems) {
-      //Assert the type of selectedItems
       const currentHabitSelected = selectedItems as HabitType;
-      //Get the name of the selected option
-      const selectedOptionOfHabitSelected =
-        currentHabitSelected.frequency[0].type;
 
-      const copyRepeatOptions = repeatOptions.map((singleOption) => {
-        if (singleOption.name === selectedOptionOfHabitSelected) {
-          return { ...singleOption, isSelected: true };
-        }
-        return { ...singleOption, isSelected: false };
-      });
-      //Update the repeatOptions array
-      setRepeatOptions(copyRepeatOptions);
+      if (currentHabitSelected.frequency?.length > 0) {
+        const selectedOptionOfHabitSelected =
+          currentHabitSelected.frequency[0].type;
+
+        const copyRepeatOptions = repeatOptions.map((singleOption) => ({
+          ...singleOption,
+          isSelected: singleOption.name === selectedOptionOfHabitSelected,
+        }));
+
+        setRepeatOptions(copyRepeatOptions);
+      }
     } else {
-      //if the selectedItems is null, it means that we are going to create a new habit
-      //set both items as false in the repeated options
-      const copyRepeatOptions = repeatOptions.map((singleOption) => {
-        return { ...singleOption, isSelected: false };
-      });
+      // If no habit is selected, ensure at least one option is selected
+      const copyRepeatOptions = repeatOptions.map((singleOption, index) => ({
+        ...singleOption,
+        isSelected: index === 0, // Select first option
+      }));
 
-      //Set the first option as selected
-      copyRepeatOptions[0].isSelected = true;
-      //Update the repeatOptions array
       setRepeatOptions(copyRepeatOptions);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openHabitWindow]);
 
   useEffect(() => {

@@ -43,6 +43,8 @@ import {
   faGamepad,
   faTools,
   faGlobe,
+  faBriefcase,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
 type iconData = {
@@ -87,6 +89,8 @@ export const iconsData: iconData[] = [
   { faIcon: faCampground, isSelected: false }, // Camping/outdoors
   { faIcon: faGamepad, isSelected: false }, // Video games
   { faIcon: faGlobe, isSelected: false },
+  { faIcon: faBriefcase, isSelected: false },
+  { faIcon: faUsers, isSelected: false },
 ];
 
 const iconMap: Record<string, IconProp> = {
@@ -127,6 +131,8 @@ const iconMap: Record<string, IconProp> = {
   faGamepad: faGamepad,
   faTools: faTools,
   faGlobe: faGlobe,
+  faBriefcase: faBriefcase,
+  faUsers: faUsers,
   // Regular version of question mark
   faQuestionCircle: faQuestionRegular,
 };

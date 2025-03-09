@@ -23,3 +23,57 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Heatmap container */
+.react-calendar-heatmap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px; /* Add gap between cells */
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Target the individual cells */
+.react-calendar-heatmap .react-calendar-heatmap-day {
+  width: 8px !important; /* Cell width */
+  height: 8px !important; /* Cell height */
+  margin: 20px !important; /* Add margin to create spacing */
+  rx: 2px; /* Rounded corners */
+  ry: 2px;
+}
+
+/* Ensure text is styled correctly */
+.react-calendar-heatmap text {
+  font-size: 8px !important;
+  fill: #aaa;
+}
+
+/* Hover effect */
+.react-calendar-heatmap rect:hover {
+  stroke: #555;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+/* Color scales (unchanged) */
+.react-calendar-heatmap .color-empty {
+  fill: #f3f4f6;
+}
+
+.react-calendar-heatmap .color-scale-1 {
+  fill: #d6e685;
+}
+
+.react-calendar-heatmap .color-scale-2 {
+  fill: #0f0004;
+}
+
+.react-calendar-heatmap .color-scale-3 {
+  fill: #44a340;
+}
+
+.react-calendar-heatmap .color-scale-4 {
+  fill: #c20c1c;
+}

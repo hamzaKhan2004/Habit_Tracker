@@ -4,7 +4,7 @@ import { useGlobalContextProivder } from "./contextApi";
 import { darkModeColor, defaultColor } from "@/colors";
 import { deleteHabit } from "./utils/allHabitsUtils/deleteHabit";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HabitType } from "./Types/GlobalTypes";
+import { AreaType, HabitType } from "./Types/GlobalTypes";
 
 function ConfirmationWindow() {
   const {
@@ -20,7 +20,16 @@ function ConfirmationWindow() {
     openConfirmationWindowObject;
   const { isDarkMode } = darkModeObject;
 
-  async function deleteOption() {
+  //Type to check the selecteditems is of AreaType or HabitType
+  function isAreaType(item: any): item is AreaType {
+    return "name" in item && "icon" in item && !("frequency" in item);
+  }
+  function isHabitType(item: any): item is HabitType {
+    console.log("Checking HabitType:", item);
+    return "frequency" in item && "isNotificationOn" in item;
+  }
+
+  async function deleteHabitOption() {
     if (!selectedItems || !selectedItems._id) {
       console.error("Error: No habit selected or missing ID.");
       return;
@@ -36,6 +45,27 @@ function ConfirmationWindow() {
       console.log("Habit deleted successfully, closing confirmation window.");
     } else {
       console.error("Failed to delete habit.");
+    }
+  }
+
+  function deleteOption() {
+    console.log("Selected Item:", selectedItems);
+
+    if (!selectedItems) {
+      console.error("Error: selectedItems is null or undefined!");
+      return;
+    }
+
+    console.log("Selected Item properties:", Object.keys(selectedItems));
+
+    if (isHabitType(selectedItems)) {
+      console.log("Deleting habit:", selectedItems._id);
+      deleteHabitOption();
+    } else if (isAreaType(selectedItems)) {
+      console.log("Deleting Area");
+      setOpenConfirmationWindow(false);
+    } else {
+      console.error("Unexpected type for selectedItems:", selectedItems);
     }
   }
 

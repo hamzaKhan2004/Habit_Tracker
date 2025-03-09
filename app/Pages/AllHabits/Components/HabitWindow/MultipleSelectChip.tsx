@@ -64,14 +64,18 @@ export default function MultipleSelectChip({
   };
 
   //Filter out the "All" element
-  const filteredAreas = allAreas.filter((area) => area.name !== "All");
+  const filteredAreas = allAreas
+    ? allAreas.filter((area) => area.name !== "All")
+    : [];
 
   //This useEffect enable us to save the whole object matches the name is the selectedAreas array
   React.useEffect(() => {
-    const selectedAreaObjects = selectedAreas.map((selectedAreas) => {
-      //Find the corresponding area object in the areas array
-      return allAreas.find((area) => area.name === selectedAreas); //Non-null assertion operator
-    });
+    const selectedAreaObjects = allAreas
+      ? selectedAreas.map((selectedAreas) =>
+          allAreas.find((area) => area.name === selectedAreas)
+        )
+      : [];
+
     setSelectedAreasItems(selectedAreaObjects);
   }, [selectedAreas]);
 
@@ -89,9 +93,8 @@ export default function MultipleSelectChip({
       const habitSelected = selectedItems as HabitType;
       const { areas } = habitSelected;
 
-      const selectedAreas = areas.map((area) => {
-        return area.name;
-      });
+      const selectedAreas = areas ? areas.map((area) => area.name) : [];
+
       setSelectedAreas(selectedAreas);
     } else {
       //when we open the habit window, empty the selectedAreas

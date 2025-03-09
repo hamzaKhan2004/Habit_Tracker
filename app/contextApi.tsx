@@ -12,12 +12,9 @@ import { menuItemType } from "./Types/MenuItemType";
 import { faRectangleList } from "@fortawesome/free-regular-svg-icons";
 import { faMoon, faSun } from "@fortawesome/free-regular-svg-icons";
 import {
-  faBriefcase,
   faChartSimple,
-  faCode,
-  faGraduationCap,
+  faFlask,
   faLayerGroup,
-  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { DarkModeItem } from "./Types/DarkModeType";
 import { AreaType, HabitType } from "./Types/GlobalTypes";
@@ -94,6 +91,16 @@ const GlobalContext = createContext<GlobalContextType>({
     selectedItems: null,
     setSelectedItems: () => {},
   },
+  openAreaFormObject: {
+    openAreaForm: false,
+    setOpenAreaForm: () => {},
+  },
+  openIconWindowObject: {
+    openIconWindow: false,
+    setOpenIconWindow: () => {},
+    iconSelected: faFlask,
+    setIconSelected: () => {},
+  },
 });
 
 function GlobalContextProvider({ children }: { children: ReactNode }) {
@@ -106,13 +113,14 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
     { id: 1, icon: faSun, isSelected: true },
     { id: 2, icon: faMoon, isSelected: false },
   ]);
-  const [allAreas, setAllAreas] = useState<AreaType[]>([
-    { _id: uuidv4(), icon: faUsers, name: "All" },
-    { _id: uuidv4(), icon: faGraduationCap, name: "Study" },
-    { _id: uuidv4(), icon: faCode, name: "Code" },
-    { _id: uuidv4(), icon: faBriefcase, name: "Work" },
-  ]);
+  // const [allAreas, setAllAreas] = useState<AreaType[]>([
+  //   { _id: uuidv4(), icon: faUsers, name: "All" },
+  //   { _id: uuidv4(), icon: faGraduationCap, name: "Study" },
+  //   { _id: uuidv4(), icon: faCode, name: "Code" },
+  //   { _id: uuidv4(), icon: faBriefcase, name: "Work" },
+  // ]);
 
+  const [allAreas, setAllAreas] = useState<AreaType[]>([]); // new logic
   const [openSideBar, setOpenSideBar] = useState(false);
   const [isDarkMode, setDarkMode] = useState(false);
 
@@ -136,8 +144,10 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
   const [selectedItems, setSelectedItems] = useState<
     HabitType | AreaType | null
   >(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isLoaded, isSignedIn, user } = useUser();
+  const [openAreaForm, setOpenAreaForm] = useState(false);
+  const [openIconWindow, setOpenIconWindow] = useState(false);
+  const [iconSelected, setIconSelected] = useState<IconProp>(faFlask);
 
   useEffect(() => {
     if (!user?.id) return; // Ensure user ID is available before fetching
@@ -151,20 +161,31 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
         const data: { habits: HabitType[] } = await response.json();
 
         // Convert the icon of the habit from string to IconProp
-        const updatedHabits = data.habits.map((habit: HabitType) => ({
-          ...habit,
-          icon:
-            typeof habit.icon === "string"
-              ? (textToIcon(habit.icon) as IconProp)
-              : habit.icon,
-          areas: habit.areas.map((area: AreaType) => ({
-            ...area,
-            icon:
-              typeof area.icon === "string"
-                ? (textToIcon(area.icon) as IconProp)
-                : area.icon,
-          })),
-        }));
+        // const updatedHabits = data.habits.map((habit: HabitType) => ({
+        //   ...habit,
+        //   icon:
+        //     typeof habit.icon === "string"
+        //       ? (textToIcon(habit.icon) as IconProp)
+        //       : habit.icon,
+        //   areas: habit.areas.map((area: AreaType) => ({
+        //     ...area,
+        //     icon:
+        //       typeof area.icon === "string"
+        //         ? (textToIcon(area.icon) as IconProp)
+        //         : area.icon,
+        //   })),
+        // }));
+
+        //New Logic for updatedHabits
+        const updatedHabits = data.habits.map((habit: HabitType) => {
+          if (typeof habit.icon === "string") {
+            return {
+              ...habit,
+              icon: textToIcon(habit.icon) as IconProp,
+            };
+          }
+          return habit;
+        });
 
         // console.log(updatedHabits);
         const updatedHabitsWithAreas = updatedHabits.map((habit: HabitType) => {
@@ -186,26 +207,34 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function fetchAllAreas() {
       const allAreasData: AreaType[] = [
-        { _id: uuidv4(), icon: textToIcon("faGlobe"), name: "All" },
+        { _id: uuidv4(), icon: textToIcon("faGlobe"), name: "All" }, //new logic
         { _id: uuidv4(), icon: textToIcon("faBook"), name: "Study" },
         { _id: uuidv4(), icon: textToIcon("faCode"), name: "Code" },
+        { _id: uuidv4(), icon: textToIcon("faBriefcase"), name: "Work" },
       ];
       setAllAreas(allAreasData);
     }
-    fetchAllHabits();
-    // fetchAllAreas();
-  }, [user?.id]); // Depend on user ID
+    //new logic
+    if (isLoaded && isSignedIn) {
+      fetchAllHabits();
+    }
+    // fetchAllHabits();
+    fetchAllAreas();
+  }, [isLoaded, isSignedIn, user?.id]); // Depend on user ID
 
   const [selectedCurrentDate, setSelectedCurrentDate] = useState(() =>
     getDateString(new Date())
   );
   const [offsetDay, setOffsetDay] = useState(0);
 
+  //Each time the menu items are updated, the sidebar is closed
   useEffect(() => {
     setOpenSideBar(false);
+    setOpenAreaForm(false);
+    setOpenConfirmationWindow(false);
+    setOpenHabitWindow(false);
   }, [menuItems]);
 
   return (
@@ -254,6 +283,16 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
         selectedItemsObject: {
           selectedItems,
           setSelectedItems,
+        },
+        openAreaFormObject: {
+          openAreaForm,
+          setOpenAreaForm,
+        },
+        openIconWindowObject: {
+          openIconWindow,
+          setOpenIconWindow,
+          iconSelected,
+          setIconSelected,
         },
       }}
     >
