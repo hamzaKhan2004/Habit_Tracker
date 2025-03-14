@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useGlobalContextProivder } from "@/app/contextApi";
 import { darkModeColor, defaultColor } from "@/colors";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
@@ -160,26 +161,26 @@ function TimePicker({
         backgroundColor: isDarkMode ? darkModeColor.background : "",
         color: isDarkMode ? "white" : "",
       }}
-      className={`bg-white text-black w-[413px] top-[89px] left-1/2 transform -translate-x-1/2 z-50 p-7 rounded-md shadow-md ${
+      className={`bg-white text-black w-[90%] sm:w-[413px] top-[89px] left-1/2 transform -translate-x-1/2 z-50 p-5 sm:p-7 rounded-md shadow-md ${
         isDarkMode ? "shadow-sm shadow-gray-50" : ""
-      }  ${openTimePickerWindow ? "absolute" : "hidden"}`}
+      } ${openTimePickerWindow ? "absolute" : "hidden"}`}
     >
-      {/* select time + closing icon  */}
-      <span className={`font-bold flex justify-between items-center `}>
+      {/* Header: Select Time + Close Icon */}
+      <span className={`font-bold flex justify-between items-center`}>
         <span>Select Time</span>
         <FontAwesomeIcon
           height={20}
           width={20}
-          className={`top-8 right-4 text-gray-300 cursor-pointer`}
+          className={`text-gray-300 cursor-pointer`}
           onClick={() => setOpenTimePickerWindow(false)}
           icon={faClose}
         />
       </span>
-      {/* --------------------------------------------- */}
-      {/* Input Fields  */}
-      <div className="flex gap-8 mt-9">
+
+      {/* Input Fields Section */}
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-6 sm:mt-9 items-center justify-center">
+        {/* Time Inputs: Hours and Minutes */}
         <div className="flex gap-2 justify-center items-center">
-          {/* Hours field  */}
           <input
             value={timeValues[0].text}
             onClick={() => updateTimeValues(0)}
@@ -190,22 +191,22 @@ function TimePicker({
             style={{
               backgroundColor: isDarkMode
                 ? timeValues[0].isSelected
-                  ? "#D90429" // selected bg in dark mode
-                  : defaultColor[50] // unselected bg in dark mode
+                  ? "#D90429"
+                  : defaultColor[50]
                 : timeValues[0].isSelected
                 ? defaultColor[100]
                 : defaultColor.backgroundSlate,
               color: isDarkMode
-                ? "white" // text color in dark mode
+                ? "white"
                 : timeValues[0].isSelected
                 ? defaultColor.default
                 : defaultColor.textColorGray,
             }}
-            className="w-[100px] text-[45px] p-4 rounded-md text-center outline-none"
+            className="w-[80px] sm:w-[100px] text-[32px] sm:text-[45px] p-2 sm:p-4 rounded-md text-center outline-none"
           />
 
           <span className="text-2xl font-bold">:</span>
-          {/* Minutes field  */}
+
           <input
             value={timeValues[1].text}
             onClick={() => updateTimeValues(1)}
@@ -216,23 +217,23 @@ function TimePicker({
             style={{
               backgroundColor: isDarkMode
                 ? timeValues[1].isSelected
-                  ? "#D90429" // selected bg in dark mode
-                  : defaultColor[50] // unselected bg in dark mode
+                  ? "#D90429"
+                  : defaultColor[50]
                 : timeValues[1].isSelected
                 ? defaultColor[100]
                 : defaultColor.backgroundSlate,
               color: isDarkMode
-                ? "white" // text color in dark mode
+                ? "white"
                 : timeValues[1].isSelected
                 ? defaultColor.default
                 : defaultColor.textColorGray,
             }}
-            className="w-[100px] text-[45px] p-4 rounded-md text-center outline-none"
+            className="w-[80px] sm:w-[100px] text-[32px] sm:text-[45px] p-2 sm:p-4 rounded-md text-center outline-none"
           />
         </div>
 
-        {/* AM OR PM OPTION  */}
-        <div className="flex flex-col gap-3">
+        {/* AM / PM Toggle */}
+        <div className="flex sm:flex-col gap-3">
           {meridiem.map((singleMeridiem, index) => (
             <span
               key={index}
@@ -240,8 +241,8 @@ function TimePicker({
               style={{
                 backgroundColor: isDarkMode
                   ? singleMeridiem.isSelected
-                    ? "#D90429" // selected bg in dark mode
-                    : defaultColor[50] // unselected bg in dark mode
+                    ? "#D90429"
+                    : defaultColor[50]
                   : singleMeridiem.isSelected
                   ? defaultColor[100]
                   : defaultColor.backgroundSlate,
@@ -251,18 +252,18 @@ function TimePicker({
                   ? defaultColor.default
                   : defaultColor.textColorGray,
               }}
-              className="text-xl flex justify-center items-center w-[104px] h-[45px] rounded-md cursor-pointer select-none"
+              className="text-md sm:text-xl flex justify-center items-center w-[60px] sm:w-[104px] h-[45px] rounded-md cursor-pointer select-none"
             >
               {singleMeridiem.text}
             </span>
           ))}
         </div>
       </div>
-      {/* ------------------------------- */}
-      {/* Save Button  */}
+
+      {/* Save Button */}
       <button
         onClick={saveTime}
-        className="bg-customRed p-3 text-white w-full rounded-md mt-10 mb-1"
+        className="bg-customRed p-2 sm:p-3 text-white w-full rounded-md mt-6 sm:mt-10 mb-1"
       >
         Save
       </button>

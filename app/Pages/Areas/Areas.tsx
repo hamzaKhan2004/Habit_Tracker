@@ -6,6 +6,7 @@ import ConfirmationWindow from "@/app/ConfirmationWindow";
 import Dropdown from "@/app/Dropdown";
 import { useGlobalContextProivder } from "@/app/contextApi";
 import IconsWindow from "../AllHabits/Components/IconsWindow/IconsWindow";
+import { Toaster } from "react-hot-toast";
 
 function Areas() {
   const {
@@ -24,6 +25,7 @@ function Areas() {
         iconSelected={iconSelected}
         setIconSelected={setIconSelected}
       />
+      <Toaster />
       <Dropdown />
       <ConfirmationWindow />
       <AllAreasTopBar />
