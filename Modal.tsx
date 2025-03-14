@@ -55,7 +55,7 @@ export default function DataFormModal({
             onClick={onClick}
             className="bg-customRed text-white mt-10 p-3 px-6"
           >
-            Add New Area
+            {FormTitle === "Add New Area"?"Add New Area" :"Edit Area"}
           </Button>
         </div>
       )}

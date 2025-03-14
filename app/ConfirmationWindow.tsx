@@ -3,8 +3,9 @@ import React from "react";
 import { useGlobalContextProivder } from "./contextApi";
 import { darkModeColor, defaultColor } from "@/colors";
 import { deleteHabit } from "./utils/allHabitsUtils/deleteHabit";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AreaType, HabitType } from "./Types/GlobalTypes";
+import { deleteArea } from "./utils/allAreaUtils/deleteArea";
+import toast from "react-hot-toast";
 
 function ConfirmationWindow() {
   const {
@@ -12,6 +13,7 @@ function ConfirmationWindow() {
     allHabitsObject,
     darkModeObject,
     selectedItemsObject,
+    allAreasObject: { allAreas, setAllAreas },
   } = useGlobalContextProivder();
 
   const { selectedItems, setSelectedItems } = selectedItemsObject;
@@ -48,7 +50,7 @@ function ConfirmationWindow() {
     }
   }
 
-  function deleteOption() {
+  async function deleteOption() {
     console.log("Selected Item:", selectedItems);
 
     if (!selectedItems) {
@@ -60,10 +62,23 @@ function ConfirmationWindow() {
 
     if (isHabitType(selectedItems)) {
       console.log("Deleting habit:", selectedItems._id);
-      deleteHabitOption();
+      await deleteHabitOption();
     } else if (isAreaType(selectedItems)) {
       console.log("Deleting Area");
+      const response = await deleteArea(
+        selectedItems,
+        allAreas,
+        setAllAreas,
+        allHabits,
+        setAllHabits
+      );
+      if (response?.success) {
+        toast.success("Area has been deleted successfully");
+      } else {
+        toast.error("Failed to delete area");
+      }
       setOpenConfirmationWindow(false);
+      setSelectedItems(null);
     } else {
       console.error("Unexpected type for selectedItems:", selectedItems);
     }

@@ -7,6 +7,6 @@ export function sendNotifications(habitName: string) {
     //Close the notification after a specified time (e.g. 5 seconds)
     setTimeout(() => {
       notification.close();
-    }, 5000);
+    }, 8000);
   }
 }

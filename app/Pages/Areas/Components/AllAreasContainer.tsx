@@ -4,6 +4,7 @@ import { useGlobalContextProivder } from "@/app/contextApi";
 import Dropdown from "@/app/Dropdown";
 import { AreaType } from "@/app/Types/GlobalTypes";
 import addNewArea from "@/app/utils/allAreaUtils/addNewArea";
+import editArea from "@/app/utils/allAreaUtils/editArea";
 import { darkModeColor, defaultColor } from "@/colors";
 import DataFormModal from "@/Modal";
 import { useUser } from "@clerk/nextjs";
@@ -14,13 +15,14 @@ import { IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
+import { textToIcon } from "../../AllHabits/Components/IconsWindow/IconData";
 
 export default function AllAreasContainer() {
   const {
     allAreasObject: { allAreas, setAllAreas },
     darkModeObject: { isDarkMode },
     openAreaFormObject: { openAreaForm, setOpenAreaForm },
-    selectedItemsObject: { selectedItems },
+    selectedItemsObject: { selectedItems, setSelectedItems },
     openIconWindowObject: { setOpenIconWindow, iconSelected },
   } = useGlobalContextProivder();
   const { user } = useUser();
@@ -34,6 +36,7 @@ export default function AllAreasContainer() {
   //   const [isOpen, setIsOpen] = useState(true);
   function handleOnClose() {
     setOpenAreaForm(!openAreaForm);
+    setSelectedItems(null);
   }
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     setAreaItem({
@@ -42,37 +45,47 @@ export default function AllAreasContainer() {
     });
   }
 
-  function handleOnClick() {
-    if (!selectedItems) {
-      if (areaItem.name.trim() === "") {
-        return toast.error("The area name field is still empty");
-      }
+  async function handleOnClick() {
+    if (areaItem.name.trim() === "") {
+      return toast.error("The area name field is still empty");
+    }
 
-      // Check if the area already exists
-      const areaExist = allAreas.some(
-        (singleArea) =>
-          singleArea.name.toLocaleLowerCase() ===
-          areaItem.name.toLocaleLowerCase()
-      );
+    const areaExist = allAreas.some(
+      (singleArea) =>
+        singleArea.name.toLocaleLowerCase() ===
+          areaItem.name.toLocaleLowerCase() && singleArea._id !== areaItem._id
+    );
 
-      if (areaExist) {
-        toast.error("The area already exists");
-        return;
-      }
+    if (areaExist) {
+      toast.error("The area already exists");
+      return;
+    }
 
-      try {
-        // Ensure `clerkUserId` is passed
+    try {
+      if (selectedItems) {
+        console.log("Updating Area:", areaItem);
+        await editArea({
+          areaItem,
+          allAreas,
+          setAllAreas,
+        });
+      } else {
+        // Adding new area
         addNewArea({
           allAreas,
           setAllAreas,
-          areaItem: { ...areaItem, clerkUserId: user?.id || "" }, // Fetch Clerk user ID
+          areaItem: { ...areaItem, clerkUserId: user?.id || "" },
         });
-        setOpenAreaForm(false);
-      } catch (error) {
-        console.log(error);
+        toast.success("New area added!");
       }
+
+      setOpenAreaForm(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong!");
     }
   }
+
   useEffect(() => {
     if (!openAreaForm) {
       setAllAreas((prevAreaItem) =>
@@ -83,11 +96,49 @@ export default function AllAreasContainer() {
     }
   }, [openAreaForm]);
 
+  useEffect(() => {
+    if (!openAreaForm) {
+      setAreaItem((prevAreaItem) => ({
+        ...prevAreaItem,
+        name: "",
+      }));
+      return;
+    } else if (selectedItems) {
+      // If editing, load selected area data
+      setAreaItem(selectedItems);
+    } else {
+      // If adding a new area
+      setAreaItem({
+        ...areaItem,
+        _id: uuidv4(),
+        clerkUserId: user?.id || "",
+      });
+    }
+  }, [openAreaForm, selectedItems]);
+
   //change the icon property of the area item when the iconselected changes
   useEffect(() => {
     setAreaItem({ ...areaItem, icon: iconSelected });
   }, [iconSelected]);
   console.log(areaItem);
+
+  useEffect(() => {
+    const fetchAreas = async () => {
+      try {
+        const response = await fetch("/api/areas");
+        const data = await response.json();
+        const processedAreas = data.map((area: AreaType) => ({
+          ...area,
+          icon: textToIcon(area.icon),
+        }));
+        setAllAreas(processedAreas);
+      } catch (error) {
+        console.error("Failed to fetch areas:", error);
+      }
+    };
+
+    fetchAreas();
+  }, []);
 
   return (
     <div
@@ -102,7 +153,7 @@ export default function AllAreasContainer() {
       <DataFormModal
         isOpen={openAreaForm}
         onClose={handleOnClose}
-        FormTitle="Add New Area"
+        FormTitle={selectedItems ? "Edit Area" : "Add New Area"}
         textValue={areaItem.name}
         onChange={handleOnChange}
         onClick={handleOnClick}

@@ -21,6 +21,7 @@ function Dropdown() {
     openConfirmationWindowObject,
     selectedItemsObject,
     habitWindowObject,
+    openAreaFormObject,
   } = useGlobalContextProivder();
 
   const { isDarkMode } = darkModeObject;
@@ -29,7 +30,7 @@ function Dropdown() {
     openConfirmationWindowObject;
   const { selectedItems, setSelectedItems } = selectedItemsObject;
   const { openHabitWindow, setOpenHabitWindow } = habitWindowObject;
-
+  const { setOpenAreaForm, openAreaForm } = openAreaFormObject;
   const ref = useRef<HTMLDivElement>(null);
 
   const dropDownMenuItems: dropMenuItem[] = [
@@ -62,7 +63,7 @@ function Dropdown() {
             setSelectedItems(selectedItems); // Ensure selected habit is set
             setOpenHabitWindow(true); // Open the habit editing window
           } else if (isAreaType(selectedItems)) {
-            console.log("Edit Area");
+            setOpenAreaForm(true);
           }
         }
         setOpenDropDown(false);
@@ -80,10 +81,10 @@ function Dropdown() {
 
   useEffect(() => {
     function handleOutSideClick(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      if (ref && !ref.current?.contains(event.target as Node)) {
         setOpenDropDown(false);
 
-        if (!openConfirmationWindow && !openHabitWindow) {
+        if (!openConfirmationWindow && !openHabitWindow && !openAreaForm) {
           setSelectedItems(null);
         }
       }

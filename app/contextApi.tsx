@@ -220,22 +220,24 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
         if (!response.ok) {
           throw new Error("Failed to fetch areas");
         }
-        let data: { areas: AreaType[] } = await response.json();
 
-        // 🛠️ If no areas exist, add the "All" area
-        if (data.areas.length === 0) {
-          const allArea = await addTheAllAreas(); // Add "All"
+        let { areas }: { areas: AreaType[] } = await response.json();
 
+        // 🛠️ Ensure "All" area always exists
+        const allAreaExists = areas.some((area) => area.name === "All");
+
+        if (!allAreaExists) {
+          const allArea = await addTheAllAreas(); // Ensure "All" area is added
           if (allArea) {
-            // 🛠️ Refetch areas after adding "All"
+            // Refetch areas after adding "All"
             const newResponse = await fetch(`/api/areas?clerkId=${user?.id}`);
             const newData: { areas: AreaType[] } = await newResponse.json();
-            data = newData; // Update data with new areas
+            areas = newData.areas; // Update areas with new data
           }
         }
 
-        // Convert icon string to IconProp
-        const updatedAreas = data.areas.map((area: AreaType) => ({
+        // 🔧 Convert icon string to IconProp
+        const updatedAreas = areas.map((area: AreaType) => ({
           ...area,
           icon:
             typeof area.icon === "string" ? textToIcon(area.icon) : area.icon,
@@ -243,7 +245,7 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
 
         setAllAreas(updatedAreas);
       } catch (error) {
-        console.log("Error In fetchAllAreas Function :", error);
+        console.log("Error in fetchAllAreas Function:", error);
       }
     }
 
@@ -269,13 +271,13 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add an area");
+        throw new Error("Failed to add the default 'All' area");
       }
 
       const data = await response.json();
       return { ...allArea, _id: data.area._id }; // 🛠️ Return updated area with ID
     } catch (error) {
-      console.log("Error In addTheAllAreas Function :", error);
+      console.log("Error in addTheAllAreas Function:", error);
     }
   }
 

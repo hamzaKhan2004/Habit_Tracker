@@ -1,11 +1,13 @@
+/* eslint-disable prefer-const */
 import { sendNotifications } from "../dashboard/notificationMessage";
 
-// sendNotifications
+// Function to schedule notifications
 export default function scheduleNotifications(
   notificationTime: string,
   days: string[],
   habitName: string
 ) {
+  // Map days to their numeric representation
   const daysMap: Record<string, number> = {
     SUN: 0,
     MON: 1,
@@ -16,41 +18,40 @@ export default function scheduleNotifications(
     SAT: 6,
   };
 
-  //Split the notifications time into the time and the AM/PM modifier
-
-  const [time, modifier] = notificationTime.split("");
-
-  // eslint-disable-next-line prefer-const
+  // Split the time string into hours, minutes, and AM/PM
+  const [time, modifier] = notificationTime.split(" ");
   let [hours, minutes] = time.split(":").map(Number);
-  //Adjust hours based on AM/PM modifier
+
+  // Convert to 24-hour format
   if (modifier === "PM" && hours < 12) hours += 12;
   if (modifier === "AM" && hours === 12) hours = 0;
 
-  //Create a new Date object for the notifications time
-  const notificationDate = new Date();
-  notificationDate.setHours(hours);
-  notificationDate.setMinutes(minutes);
-  notificationDate.setSeconds(0);
-
-  //Get the current date and time
+  // Get the current date and time
   const now = new Date();
-  //Get the current day of the week
   const nowDay = now.getDay();
-  //Get the current time in milliseconds
   const nowTime = now.getTime();
 
+  // Loop through selected days to schedule notifications
   days.forEach((day) => {
     const targetDay = daysMap[day];
-    let diff = targetDay - nowDay;
-    if (diff < 0) diff += 7;
-    const targetDate = new Date(now);
-    targetDate.setDate(now.getDate() + diff);
-    targetDate.setHours(hours);
-    targetDate.setMinutes(minutes);
-    targetDate.setSeconds(0);
 
-    //Calculate the timeout duration
+    // Calculate day difference
+    let diff = targetDay - nowDay;
+    if (diff < 0) diff += 7; // If day has passed this week, move to next week
+
+    // Create the target notification date
+    const targetDate = new Date();
+    targetDate.setDate(now.getDate() + diff);
+    targetDate.setHours(hours, minutes, 0, 0);
+
+    // Calculate time difference in milliseconds
     const timeout = targetDate.getTime() - nowTime;
-    setTimeout(() => sendNotifications(habitName), timeout);
+
+    if (timeout > 0) {
+      console.log(`Notification scheduled for: ${targetDate}`);
+      setTimeout(() => sendNotifications(habitName), timeout);
+    } else {
+      console.log(`Skipping past time: ${targetDate}`);
+    }
   });
 }
